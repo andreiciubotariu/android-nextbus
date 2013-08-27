@@ -52,7 +52,7 @@ public class Direction implements BaseInformationProvider{
 	}
 	
 	public static List <Direction> getDirections(){
-		List <HashMap <String, String>> rawObjects = Parser.parse(TAGS, "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=104");
+		List <HashMap <String, String>> rawObjects = Parser.parse(3,"direction", "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=104");
 		List <Direction> directions = new ArrayList <Direction>();
 		for (int x = 0; x < rawObjects.size(); x++){
 			directions.add(new Direction(rawObjects.get(x)));

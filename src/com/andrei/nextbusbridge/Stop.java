@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Stop implements BaseInformationProvider {
 	
-	private final static String [] TAGS = new String [] {"body","route","stop"};
 	private String mTag, mTitle, mStopId;
 	double mLat, mLon;
 
@@ -66,7 +65,7 @@ public class Stop implements BaseInformationProvider {
 	}
 
 	public static List <Stop> getAllStops(){
-		List <HashMap <String, String>> rawObjects = Parser.parse(TAGS, "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=104");
+		List <HashMap <String, String>> rawObjects = Parser.parse(3,"stop", "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=104");
 		List <Stop> allStops = new ArrayList <Stop>();
 		for (int x = 0; x < rawObjects.size(); x++){
 			allStops.add(new Stop (rawObjects.get(x)));

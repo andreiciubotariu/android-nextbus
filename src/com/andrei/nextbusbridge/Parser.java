@@ -17,10 +17,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 public class Parser {
 
-	public static List <HashMap <String, String>> parse (String [] tags, String xmlUrl){
-		int tagIndex = 0;
-		boolean keepCounting = true;
-
+	public static List <HashMap <String, String>> parse (int depth, String wantedTag, String xmlUrl){
 		String xml = null;
 		List<HashMap <String,String>> list = new ArrayList <HashMap <String,String>> ();
 		try {
@@ -64,29 +61,17 @@ public class Parser {
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
 					System.out.println (xpp.getName().trim());
-					if (xpp.getName().trim().equals(tags[tagIndex]) && tagIndex != tags.length-1){
-						eventType = tryToGetNext(xpp);
-						if (keepCounting){
-							tagIndex++;
+					if (xpp.getName().trim().equals(wantedTag) && xpp.getDepth() == depth){
+						HashMap <String,String> node = new HashMap <String,String>();
+						for (int x = 0; x < xpp.getAttributeCount();x++){
+							String name = xpp.getAttributeName(x).trim();
+							String value = xpp.getAttributeValue(x).trim();
+							System.out.println (name + " #####|##### "+ value);
+							node.put (name, value);
 						}
-						continue;
-					}
-					else if (xpp.getName().trim().equals(tags[tagIndex]) && tagIndex == tags.length-1){
-						keepCounting = false;
-					}
-					else /*if (!xpp.getName().trim().equals(tags[tagIndex]) && tagIndex == tags.length)*/{
-						eventType = XmlPullParser.END_DOCUMENT;
-						continue;
-					}
-					HashMap <String,String> node = new HashMap <String,String>();
-					for (int x = 0; x < xpp.getAttributeCount();x++){
-						String name = xpp.getAttributeName(x).trim();
-						String value = xpp.getAttributeValue(x).trim();
-						System.out.println (name + " #####|##### "+ value);
-						node.put (name, value);
-					}
-					if (!node.isEmpty()){
-						list.add(node);
+						if (!node.isEmpty()){
+							list.add(node);
+						}
 					}
 				}
 				eventType = tryToGetNext(xpp);

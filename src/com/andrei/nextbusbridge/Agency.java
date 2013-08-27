@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Agency implements BaseInformationProvider {
 
-	private final static String [] TAGS = new String [] {"body", "agency"};
 	private String mTag, mTitle, mShortTitle, mRegionTitle;
 
 	public Agency (String tag, String title, String shortTitle, String regionTitle){
@@ -42,7 +41,7 @@ public class Agency implements BaseInformationProvider {
 	}
 
 	public static List <Agency> getAgencies(){
-		List <HashMap <String, String>> rawObjects = Parser.parse(TAGS, "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList");
+		List <HashMap <String, String>> rawObjects = Parser.parse(2, "agency", "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList");
 		List <Agency> agencies = new ArrayList <Agency>();
 		for (int x = 0; x < rawObjects.size(); x++){
 			agencies.add(new Agency (rawObjects.get(x)));
