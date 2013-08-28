@@ -18,28 +18,21 @@ import org.xmlpull.v1.XmlPullParserFactory;
 public class Parser {
 
 	public static List <HashMap <String, String>> parse (int depth, String wantedTag, String xmlUrl){
+		return parse (-1,null,null,null, depth,wantedTag, xmlUrl);
+	}
+
+	public static List <HashMap <String, String>> parse (int filterDepth, String filterTag, String filterAttrib, 
+			String filterValue,	int depth, String wantedTag, String xmlUrl){
+
+		boolean filtered = filterDepth >= 0 && filterTag != null;
+		boolean filterFulfilled = !filtered;
+
 		String xmlContent = null;
 		List<HashMap <String,String>> list = new ArrayList <HashMap <String,String>> ();
-		try {
-			URL url = new URL(xmlUrl);
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setConnectTimeout(5000);
-			urlConnection.setReadTimeout(3000);
-			try {
-				xmlContent=  IOUtils.toString(url, "UTF-8");
-			}
-			finally {
-				urlConnection.disconnect();
-			}
 
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return list;
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			return list;
-		} catch (IOException e) {
-			e.printStackTrace();
+		xmlContent = getXmlAsString(xmlUrl);
+
+		if (xmlContent == null){
 			return list;
 		}
 
@@ -61,7 +54,20 @@ public class Parser {
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
 					System.out.println (xpp.getName().trim());
-					if (xpp.getName().trim().equals(wantedTag) && xpp.getDepth() == depth){
+					if (filtered && xpp.getName().trim().equals(filterTag) && xpp.getDepth() == filterDepth){
+						int attribCount = xpp.getAttributeCount();
+						if (attribCount == 0){
+							filterFulfilled = true;
+						}
+						for (int x = 0; x < attribCount;x++){
+							if (xpp.getAttributeName(x).trim().equals (filterAttrib) && 
+									xpp.getAttributeValue(x).trim().equals(filterValue)){
+								filterFulfilled = true;
+								break;
+							}
+						}
+					}
+					else if (filterFulfilled && xpp.getName().trim().equals(wantedTag) && xpp.getDepth() == depth){
 						HashMap <String,String> node = new HashMap <String,String>();
 						for (int x = 0; x < xpp.getAttributeCount();x++){
 							String name = xpp.getAttributeName(x).trim();
@@ -74,6 +80,11 @@ public class Parser {
 						}
 					}
 				}
+				else if (eventType == XmlPullParser.END_TAG){
+					if (xpp.getDepth() == filterDepth){
+						filterFulfilled = false;
+					}
+				}
 				eventType = tryToGetNext(xpp);
 			}
 			return list;
@@ -81,6 +92,31 @@ public class Parser {
 		catch (XmlPullParserException e) {
 			e.printStackTrace();
 			return list;
+		}
+	}
+
+	private static String getXmlAsString (String xmlUrl){
+		try {
+			URL url = new URL(xmlUrl);
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setConnectTimeout(5000);
+			urlConnection.setReadTimeout(3000);
+			try {
+				return IOUtils.toString(url, "UTF-8");
+			}
+			finally {
+				urlConnection.disconnect();
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
