@@ -18,7 +18,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 public class Parser {
 
 	public static List <HashMap <String, String>> parse (int depth, String wantedTag, String xmlUrl){
-		String xml = null;
+		String xmlContent = null;
 		List<HashMap <String,String>> list = new ArrayList <HashMap <String,String>> ();
 		try {
 			URL url = new URL(xmlUrl);
@@ -26,7 +26,7 @@ public class Parser {
 			urlConnection.setConnectTimeout(5000);
 			urlConnection.setReadTimeout(3000);
 			try {
-				xml=  IOUtils.toString(url, "UTF-8");
+				xmlContent=  IOUtils.toString(url, "UTF-8");
 			}
 			finally {
 				urlConnection.disconnect();
@@ -54,7 +54,7 @@ public class Parser {
 			xpp = factory.newPullParser();
 
 
-			xpp.setInput(new StringReader (xml == null ? "<notag> no tag </notag>" : xml));
+			xpp.setInput(new StringReader (xmlContent == null ? "<notag> no tag </notag>" : xmlContent));
 
 			int eventType = xpp.getEventType();
 
