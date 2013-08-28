@@ -7,7 +7,7 @@ import java.util.List;
 public class Stop implements BaseInformationProvider {
 
 	private String mTag, mTitle, mStopId;
-	double mLat, mLon;
+	private Point mStopLocation;
 
 	public Stop (){
 
@@ -16,20 +16,10 @@ public class Stop implements BaseInformationProvider {
 	public Stop (HashMap <String, String> values){
 		mTag = values.get("tag");
 		mTitle = values.get("title");
-		mLat = getDouble(values.get("lat"));
-		mLon = getDouble(values.get("lon"));
+		mStopLocation = new Point (values.get("lat"),values.get("lon"));
 		mStopId = values.get("stopId");
 	}
 
-	private static double  getDouble (String value){
-		try {
-			return Double.parseDouble(value);
-		}
-		catch (Exception e){
-			e.printStackTrace();
-			return -1;
-		}
-	}
 	@Override
 	public String getTag() {
 		return mTag;
@@ -57,21 +47,12 @@ public class Stop implements BaseInformationProvider {
 		this.mStopId = newStopId;
 	}
 
-	public double getLat() {
-		return mLat;
+	public Point getLocation() {
+		return mStopLocation;
 	}
 
-	public void setLat(double newLat) {
-		this.mLat = newLat;
-	}
-
-	public double getLon() {
-		return mLon;
-	}
-
-
-	public void setLon(double newLon) {
-		this.mLon = newLon;
+	public void setLocation (Point newLoc){
+		mStopLocation = newLoc;
 	}
 
 	public static List <Stop> getAllStops(){
