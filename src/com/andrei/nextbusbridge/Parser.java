@@ -95,6 +95,72 @@ public class Parser {
 		}
 	}
 
+	public static List <Path> parsePaths (String xmlUrl){
+
+		//boolean filtered = filterDepth >= 0 && filterTag != null;
+		//boolean filterFulfilled = !filtered;
+
+		String xmlContent = null;
+		List<Path> list = new ArrayList <Path> ();
+
+		xmlContent = getXmlAsString(xmlUrl);
+
+		if (xmlContent == null){
+			return list;
+		}
+
+		XmlPullParserFactory factory;
+
+		try {
+			factory = XmlPullParserFactory.newInstance();
+
+			factory.setNamespaceAware(true);
+			XmlPullParser xpp;
+
+			xpp = factory.newPullParser();
+
+
+			xpp.setInput(new StringReader (xmlContent == null ? "<notag> no tag </notag>" : xmlContent));
+
+			int eventType = xpp.getEventType();
+
+			Path path = new Path();
+			while (eventType != XmlPullParser.END_DOCUMENT){
+				if(eventType == XmlPullParser.START_TAG) {
+					System.out.println (xpp.getName().trim());
+					String nodeName = xpp.getName().trim();
+					if (nodeName.equals("path")){
+						path = new Path ();
+					}
+					else if (nodeName.equals("point")){
+						HashMap <String, String> node = new HashMap <String,String>();
+						for (int x = 0; x < xpp.getAttributeCount();x++){
+							String name = xpp.getAttributeName(x).trim();
+							String value = xpp.getAttributeValue(x).trim();
+
+							node.put (name, value);
+						}
+						if (!node.isEmpty()){
+							path.addPoint(new Point (node));
+						}
+					}
+				}
+				else if (eventType == XmlPullParser.END_TAG){
+					if (xpp.getName().equals("path")){
+						list.add(path);
+						path = new Path();
+					}
+				}
+				eventType = tryToGetNext(xpp);
+			}
+			return list;
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+			return list;
+		}
+	}
+
 	private static String getXmlAsString (String xmlUrl){
 		try {
 			URL url = new URL(xmlUrl);

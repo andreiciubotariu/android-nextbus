@@ -11,13 +11,20 @@ public class Path {
 		mPoints = points;
 	}
 	
+	public Path() {
+		mPoints = new ArrayList <Point>();
+	}
+	
+	public void addPoint (Point point){
+		mPoints.add(point);
+	}
+
 	public List <Point> getPoints (){
 		return mPoints;
 	}
 	
 	public static List <Path> getPathsForRoute (){
-		//TODO actual implementation
-		return new ArrayList <Path> ();
+		return Parser.parsePaths("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=104");
 	}
 	
 }
