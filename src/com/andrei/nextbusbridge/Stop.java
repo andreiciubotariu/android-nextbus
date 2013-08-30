@@ -1,8 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Stop implements BaseInformationProvider {
 
@@ -33,7 +31,6 @@ public class Stop implements BaseInformationProvider {
 		return mTitle;
 	}
 
-
 	public void setTitle(String newTitle) {
 		this.mTitle = newTitle;
 	}
@@ -53,16 +50,5 @@ public class Stop implements BaseInformationProvider {
 
 	public void setLocation (Point newLoc){
 		mStopLocation = newLoc;
-	}
-
-	public static List <Stop> getAllStops(){
-		List <HashMap <String, String>> rawObjects = Parser.parse(3,"stop", "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=104");
-		//stops for a certain direction: List <HashMap <String, String>> rawObjects = Parser.parse(3,"direction","tag","104_0_104",4,"stop", "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=104");
-		List <Stop> allStops = new ArrayList <Stop>();
-		for (int x = 0; x < rawObjects.size(); x++){
-			allStops.add(new Stop (rawObjects.get(x)));
-		}
-
-		return allStops;
 	}
 }

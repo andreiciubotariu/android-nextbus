@@ -17,14 +17,13 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 public class Parser {
 
-	public static List <HashMap <String, String>> parse (int depth, String wantedTag, String xmlUrl){
-		return parse (-1,null,null,null, depth,wantedTag, xmlUrl);
+	public static List <HashMap <String, String>> parse (XmlTagFilter wanted, String xmlUrl){
+		return parse (null, wanted, xmlUrl);
 	}
 
-	public static List <HashMap <String, String>> parse (int filterDepth, String filterTag, String filterAttrib, 
-			String filterValue,	int depth, String wantedTag, String xmlUrl){
+	public static List <HashMap <String, String>> parse (XmlTagFilter parent,XmlTagFilter wanted, String xmlUrl){
 
-		boolean filtered = filterDepth >= 0 && filterTag != null;
+		boolean filtered = parent != null;
 		boolean filterFulfilled = !filtered;
 
 		String xmlContent = null;
@@ -36,38 +35,28 @@ public class Parser {
 			return list;
 		}
 
-		XmlPullParserFactory factory;
-
 		try {
-			factory = XmlPullParserFactory.newInstance();
-
-			factory.setNamespaceAware(true);
-			XmlPullParser xpp;
-
-			xpp = factory.newPullParser();
-
-
-			xpp.setInput(new StringReader (xmlContent == null ? "<notag> no tag </notag>" : xmlContent));
+			XmlPullParser xpp = initParser (xmlContent);
 
 			int eventType = xpp.getEventType();
 
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
 					System.out.println (xpp.getName().trim());
-					if (filtered && xpp.getName().trim().equals(filterTag) && xpp.getDepth() == filterDepth){
+					if (filtered && xpp.getName().trim().equals(parent.getTag()) && xpp.getDepth() == parent.getDepth()){
 						int attribCount = xpp.getAttributeCount();
 						if (attribCount == 0){
 							filterFulfilled = true;
 						}
 						for (int x = 0; x < attribCount;x++){
-							if (xpp.getAttributeName(x).trim().equals (filterAttrib) && 
-									xpp.getAttributeValue(x).trim().equals(filterValue)){
+							if (xpp.getAttributeName(x).trim().equals (parent.getAttribute()) && 
+									xpp.getAttributeValue(x).trim().equals(parent.getAttributeValue())){
 								filterFulfilled = true;
 								break;
 							}
 						}
 					}
-					else if (filterFulfilled && xpp.getName().trim().equals(wantedTag) && xpp.getDepth() == depth){
+					else if (filterFulfilled && xpp.getName().trim().equals(wanted.getTag()) && xpp.getDepth() == wanted.getDepth()){
 						HashMap <String,String> node = new HashMap <String,String>();
 						for (int x = 0; x < xpp.getAttributeCount();x++){
 							String name = xpp.getAttributeName(x).trim();
@@ -81,7 +70,7 @@ public class Parser {
 					}
 				}
 				else if (eventType == XmlPullParser.END_TAG){
-					if (xpp.getDepth() == filterDepth){
+					if (parent != null && xpp.getDepth() == parent.getDepth()){
 						filterFulfilled = false;
 					}
 				}
@@ -97,9 +86,6 @@ public class Parser {
 
 	public static List <Path> parsePaths (String xmlUrl){
 
-		//boolean filtered = filterDepth >= 0 && filterTag != null;
-		//boolean filterFulfilled = !filtered;
-
 		String xmlContent = null;
 		List<Path> list = new ArrayList <Path> ();
 
@@ -109,19 +95,9 @@ public class Parser {
 			return list;
 		}
 
-		XmlPullParserFactory factory;
 
 		try {
-			factory = XmlPullParserFactory.newInstance();
-
-			factory.setNamespaceAware(true);
-			XmlPullParser xpp;
-
-			xpp = factory.newPullParser();
-
-
-			xpp.setInput(new StringReader (xmlContent == null ? "<notag> no tag </notag>" : xmlContent));
-
+			XmlPullParser xpp = initParser (xmlContent);
 			int eventType = xpp.getEventType();
 
 			Path path = new Path();
@@ -159,6 +135,22 @@ public class Parser {
 			e.printStackTrace();
 			return list;
 		}
+	}
+	
+	private static XmlPullParser initParser (String xmlContent) throws XmlPullParserException{
+		XmlPullParserFactory factory;
+		factory = XmlPullParserFactory.newInstance();
+
+		factory.setNamespaceAware(true);
+		XmlPullParser xpp;
+
+		xpp = factory.newPullParser();
+
+
+		xpp.setInput(new StringReader (xmlContent == null ? "<notag> no tag </notag>" : xmlContent));
+		
+		return xpp;
+
 	}
 
 	private static String getXmlAsString (String xmlUrl){

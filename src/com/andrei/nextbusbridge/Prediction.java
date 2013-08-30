@@ -4,7 +4,9 @@ import java.util.HashMap;
 
 public class Prediction {
 
-	private String mBlock, mDirTag, mTripTag, mBranch;
+	private String mBlock, mDirTag, mTripTag, mBranch,mVehicle;
+	private long mEpochTime;
+	private int mSeconds,mMinutes;
 	private boolean mIsDeparture, mAffectedByLayover, mIsSheduleBased, mDelayed;
 	
 	public Prediction (){
@@ -16,6 +18,12 @@ public class Prediction {
 		mDirTag = values.get("dirTag");
 		mTripTag = values.get("tripTag");
 		mBranch = values.get("branch");
+		mVehicle = values.get("vehicle");
+		
+		mEpochTime = Long.parseLong(values.get("epochTime"));
+		
+		mSeconds = Integer.parseInt (values.get("seconds"));
+		mMinutes = Integer.parseInt (values.get("minutes"));
 		
 		mIsDeparture = Boolean.parseBoolean("isDeparture");
 		mAffectedByLayover = Boolean.parseBoolean("affectedByLayover");
@@ -86,6 +94,36 @@ public class Prediction {
 	public void setDelayed(boolean delayed) {
 		this.mDelayed = delayed;
 	}
-	
-	
+
+	public String getVehicle() {
+		return mVehicle;
+	}
+
+	public void setVehicle(String vehicle) {
+		this.mVehicle = vehicle;
+	}
+
+	public long getEpochTime() {
+		return mEpochTime;
+	}
+
+	public void setEpochTime(long epochTime) {
+		this.mEpochTime = epochTime;
+	}
+
+	public int getSeconds() {
+		return mSeconds;
+	}
+
+	public void setSeconds(int seconds) {
+		this.mSeconds = seconds;
+	}
+
+	public int getMinutes() {
+		return mMinutes;
+	}
+
+	public void setMinutes(int minutes) {
+		this.mMinutes = minutes;
+	}
 }

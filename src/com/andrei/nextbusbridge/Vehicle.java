@@ -10,7 +10,6 @@ public class Vehicle  {
 	private boolean mPredictable;
 	
 	public Vehicle (){
-		
 	}
 	
 	public Vehicle (HashMap <String, String> values){
@@ -79,5 +78,4 @@ public class Vehicle  {
 	public void setPredictable(boolean predictable) {
 		this.mPredictable = predictable;
 	}
-	
 }

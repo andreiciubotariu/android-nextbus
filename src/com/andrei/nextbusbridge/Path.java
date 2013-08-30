@@ -22,9 +22,4 @@ public class Path {
 	public List <Point> getPoints (){
 		return mPoints;
 	}
-	
-	public static List <Path> getPathsForRoute (){
-		return Parser.parsePaths("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=104");
-	}
-	
 }

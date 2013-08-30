@@ -1,8 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Agency implements BaseInformationProvider {
 
@@ -38,15 +36,5 @@ public class Agency implements BaseInformationProvider {
 
 	public String getmRegionTitle() {
 		return mRegionTitle;
-	}
-
-	public static List <Agency> getAgencies(){
-		List <HashMap <String, String>> rawObjects = Parser.parse(2, "agency", "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList");
-		List <Agency> agencies = new ArrayList <Agency>();
-		for (int x = 0; x < rawObjects.size(); x++){
-			agencies.add(new Agency (rawObjects.get(x)));
-		}
-
-		return agencies;
 	}
 }

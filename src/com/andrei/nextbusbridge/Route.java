@@ -1,8 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Route implements BaseInformationProvider {
 
@@ -27,15 +25,4 @@ public class Route implements BaseInformationProvider {
 	public String getTitle() {
 		return mTitle;
 	}
-	
-	public static List <Route> getRoutes(){
-		List <HashMap <String, String>> rawObjects = Parser.parse(2,"route", "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=ttc");
-		List <Route> routes = new ArrayList <Route>();
-		for (int x = 0; x < rawObjects.size(); x++){
-			routes.add(new Route (rawObjects.get(x)));
-		}
-
-		return routes;
-	}
-
 }
