@@ -1,4 +1,4 @@
-package com.example.linkedxmltest;
+package com.andrei.nextbusbridge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
