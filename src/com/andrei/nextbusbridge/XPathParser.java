@@ -24,50 +24,14 @@ import org.xml.sax.InputSource;
 
 public class XPathParser {
 
-	//http://commons.apache.org/proper/commons-jcs/getting_started/intro.html
-	public static void parse (){
-		HttpURLConnection conn = null;
-		try {
-			conn = getXmlStream("http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList");
-			String expression = "//agency";
-			//InputSource inputSrc = new InputSource (conn.getInputStream());
-			InputSource inputSrc = new InputSource (new ByteArrayInputStream(getXmlAsString("http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList").getBytes()));
-			XPath xpath = XPathFactory.newInstance().newXPath();
-
-			NodeList nodes = (NodeList) xpath.evaluate (expression,inputSrc,XPathConstants.NODESET);
-
-			if(nodes != null && nodes.getLength() > 0) {
-				int len = nodes.getLength();
-				for(int i = 0; i < len; ++i) {
-					// query value
-					Node node = nodes.item(i);
-					
-					for (int x = 0; x < node.getAttributes().getLength();x ++){
-						Node z = node.getAttributes().item(x);
-						System.out.println (z.getNodeName() + " = " +z.getNodeValue());
-					}
-					
-				}
-			}
-		} catch (XPathExpressionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} /*catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		finally {
-			if (conn != null){
-				conn.disconnect();
-			}
-		}
-
+	public static List <Map <String,String>> parseXml (String xpathExpression, URL xmlUrl){
+		String xmlContent = getXmlAsString(xmlUrl);
+		return parseXml (xpathExpression, xmlContent);
 	}
 	
-	public static List <Map <String,String>> parseXml (String xpathExpression,String xmlUrl){
+	public static List <Map <String,String>> parseXml (String xpathExpression,String xmlContent){
 		List <Map <String,String>> list = new ArrayList <Map <String,String>> ();
 		try {
-			String xmlContent = getXmlAsString(xmlUrl);
 			if (xmlContent == null){
 				return list;
 			}
@@ -95,34 +59,11 @@ public class XPathParser {
 		catch (XPathExpressionException e){
 			e.printStackTrace();
 		}
-		
 		return list;
 	}
-
-	private static HttpURLConnection getXmlStream (String xmlUrl){
-		try {
-			URL url = new URL(xmlUrl);
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setConnectTimeout(5000);
-			urlConnection.setReadTimeout(3000);
-			//return IOUtils.toString(url, "UTF-8");
-			return urlConnection;
-
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 	
-	private static String getXmlAsString (String xmlUrl){
+	private static String getXmlAsString (URL url){
 		try {
-			URL url = new URL(xmlUrl);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setConnectTimeout(5000);
 			urlConnection.setReadTimeout(3000);
