@@ -99,4 +99,23 @@ public class Commands {
 		}		
 		return predictions;
 	}
+	
+	public static List <Vehicle> getVehicles (String agencyTag, String routeTag, long timeFilter){
+		if (timeFilter < 0){
+			timeFilter = 0L;
+		}
+		List <Vehicle> vehicles = new ArrayList <Vehicle> ();
+		try {
+			URL url = new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a="+agencyTag+"&r="+routeTag+"&t="+timeFilter);
+			XmlTagFilter wanted = new XmlTagFilter(2, "vechile");
+			List <HashMap <String, String>> rawObjects = Parser.parse(wanted, url);
+			for (int x = 0; x < rawObjects.size();x++){
+				vehicles.add(new Vehicle (rawObjects.get(x)));
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return vehicles;
+	}
 }
