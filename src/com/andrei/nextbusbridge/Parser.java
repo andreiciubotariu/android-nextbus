@@ -17,27 +17,20 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.util.Log;
+
 import com.andrei.nextbusbridge.Message.ConfiguredRoute;
 import com.andrei.nextbusbridge.Message.ConfiguredStop;
 
 public class Parser {
-	public static List <HashMap <String,String>> parse (XmlTagFilter wanted, URL xmlUrl){
+	public static List <HashMap <String,String>> parse (XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
 		String content = getXmlAsString(xmlUrl);
-		return parse (wanted, content);
+		return parse (wanted,content,filters);
 	}
 
-	public static List <HashMap <String, String>> parse (XmlTagFilter wanted, String xmlContent){
-		return parse (null, wanted, xmlContent);
-	}
+	public static List <HashMap <String, String>> parse (XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
 
-	public static List <HashMap <String,String>> parse (XmlTagFilter parent, XmlTagFilter wanted, URL xmlUrl){
-		String content = getXmlAsString(xmlUrl);
-		return parse (parent, wanted, content);
-	}
-
-	public static List <HashMap <String, String>> parse (XmlTagFilter parent,XmlTagFilter wanted, String xmlContent){
-
-		boolean filtered = parent != null;
+		boolean filtered = filters != null && filters.length > 0;
 		boolean filterFulfilled = !filtered;
 		List<HashMap <String,String>> list = new ArrayList <HashMap <String,String>> ();
 
@@ -45,6 +38,7 @@ public class Parser {
 			return list;
 		}
 
+		int currentFilter = 0;
 		try {
 			XmlPullParser xpp = initParser (xmlContent);
 
@@ -52,17 +46,38 @@ public class Parser {
 
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
-					System.out.println (xpp.getName().trim());
-					if (filtered && xpp.getName().trim().equals(parent.getTag()) && xpp.getDepth() == parent.getDepth()){
+					//System.out.println (xpp.getName().trim());
+					//Log.i ("FILTER", ""+currentFilter);
+					/*if (filters.length > 0){
+						System.out.println ("Name: " + filters [currentFilter].getTag());
+						System.out.println ("filtered: " + filtered);
+						System.out.println ("Not filter fulfilled: " + !filterFulfilled);
+						System.out.println ("currentFilter" +  currentFilter);
+						System.out.println ("filters.length" + filters.length);
+						System.out.println ("Current filter object" + filters [currentFilter]);
+						System.out.println ("Same name: " +xpp.getName().trim().equals(filters [currentFilter].getTag()) + "<<|>>");
+						System.out.println (xpp.getDepth() == filters [currentFilter].getDepth());
+					}*/
+					if (filtered && !filterFulfilled && xpp.getName().trim().equals(filters [currentFilter].getTag()) && xpp.getDepth() == filters [currentFilter].getDepth()){
+						boolean currentFilterFulfilled = false;
 						int attribCount = xpp.getAttributeCount();
-						if (attribCount == 0){
-							filterFulfilled = true;
+						System.out.println ("attributeCount is: " + attribCount);
+						if (attribCount == 0 || xpp.getName().trim().equals ("body")){
+							currentFilterFulfilled = true;
 						}
 						for (int x = 0; x < attribCount;x++){
-							if (xpp.getAttributeName(x).trim().equals (parent.getAttribute()) && 
-									xpp.getAttributeValue(x).trim().equals(parent.getAttributeValue())){
-								filterFulfilled = true;
+							System.out.println (String.format ("%s %s",xpp.getAttributeName(x), xpp.getAttributeName(x)));
+							if (xpp.getAttributeName(x).trim().equals (filters [currentFilter].getAttribute()) && 
+									xpp.getAttributeValue(x).trim().equals(filters [currentFilter].getAttributeValue())){
+								currentFilterFulfilled = true;
 								break;
+							}
+						}
+						
+						if (currentFilterFulfilled){
+							currentFilter++;
+							if (currentFilter == filters.length){
+								filterFulfilled = true;
 							}
 						}
 					}
@@ -71,7 +86,7 @@ public class Parser {
 						for (int x = 0; x < xpp.getAttributeCount();x++){
 							String name = xpp.getAttributeName(x).trim();
 							String value = xpp.getAttributeValue(x).trim();
-							System.out.println (name + " #####|##### "+ value);
+							//System.out.println (name + " #####|##### "+ value);
 							node.put (name, value);
 						}
 						if (!node.isEmpty()){
@@ -80,9 +95,18 @@ public class Parser {
 					}
 				}
 				else if (eventType == XmlPullParser.END_TAG){
-					if (parent != null && xpp.getDepth() == parent.getDepth()){
+					int prevFilter = currentFilter - 1;
+					if (filtered && prevFilter >= 0 && filters [prevFilter] != null && xpp.getName().trim().equals(filters [prevFilter].getTag()) && xpp.getDepth() == filters [prevFilter].getDepth()){
+					//if (filtered && (filterFulfilled || currentFilter > 0 && filters [currentFilter] != null && xpp.getDepth() == filters [currentFilter].getDepth())){
 						filterFulfilled = false;
+						currentFilter --;
 					}
+					/*else {
+						filtersCompleted++;
+					}
+					if (filtersCompleted < 0){
+						filtersCompleted = 0;
+					}*/
 				}
 				eventType = tryToGetNext(xpp);
 			}

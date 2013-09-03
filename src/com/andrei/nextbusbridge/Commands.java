@@ -10,7 +10,13 @@ public class Commands {
 
 	public static List <Agency> getAgencies(){
 		XmlTagFilter wanted = new XmlTagFilter (2,"agency");
-		List <HashMap <String, String>> rawObjects = Parser.parse(wanted, "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList");
+		List<HashMap<String, String>> rawObjects = null;
+		try {
+			rawObjects = Parser.parse(wanted,new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList"));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List <Agency> agencies = new ArrayList <Agency>();
 		for (int x = 0; x < rawObjects.size(); x++){
 			agencies.add(new Agency (rawObjects.get(x)));
@@ -20,7 +26,13 @@ public class Commands {
 	
 	public static List <Direction> getDirections(String agencyTag, String routeTag){
 		XmlTagFilter wanted = new XmlTagFilter (3,"direction");
-		List <HashMap <String, String>> rawObjects = Parser.parse(wanted, "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag);
+		List<HashMap<String, String>> rawObjects = null;
+		try {
+			rawObjects = Parser.parse(wanted, new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return generateDirections(rawObjects);
 	}
 	
@@ -32,7 +44,7 @@ public class Commands {
 		return directions;
 	}
 	
-	public static List <Path> getPathsForRoute (String agencyTag, String routeTag){
+	/*public static List <Path> getPathsForRoute (String agencyTag, String routeTag){
 		try {
 			return Parser.parsePaths(new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag));
 		} catch (MalformedURLException e) {
@@ -51,11 +63,17 @@ public class Commands {
 			routes.add(new Route (rawObjects.get(x)));
 		}
 		return routes;
-	}
+	}*/
 	
 	public static List <Stop> getAllStops(String agencyTag, String routeTag){
 		XmlTagFilter wanted = new XmlTagFilter (3,"stop");
-		List <HashMap <String, String>> rawObjects = Parser.parse(wanted, "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag);
+		List<HashMap<String, String>> rawObjects = null;
+		try {
+			rawObjects = Parser.parse(wanted,new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return generateStops (rawObjects);
 	}
 	
@@ -69,11 +87,21 @@ public class Commands {
 	
 	public static List <Stop> getAllStopsForDirection (String agencyTag, String routeTag, String directionTag){
 		List <Stop> allStops = getAllStops (agencyTag, routeTag);
+		XmlTagFilter body = new XmlTagFilter (1, "body");
+		XmlTagFilter route = new XmlTagFilter (2,"route");
+		route.setAttrributeSpec("tag", routeTag);
 		XmlTagFilter parent = new XmlTagFilter(3, "direction");
 		parent.setAttrributeSpec("tag",directionTag);
 		
 		XmlTagFilter wanted = new XmlTagFilter(4, "stop");
-		List <HashMap <String, String>> rawObjects = Parser.parse(parent,wanted, "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag);
+		List<HashMap<String, String>> rawObjects = null;
+		try {
+			rawObjects = Parser.parse(wanted,new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag), body, route, parent);
+			System.out.println ("Rawobjects: " + rawObjects.size());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		List <Stop> filteredStops = generateStops(rawObjects);
 		
@@ -92,7 +120,13 @@ public class Commands {
 	public static List <Prediction> getPredictionsForStop (String agencyTag, String routeTag, String stopTag){
 		XmlTagFilter wanted = new XmlTagFilter (4,"prediction");
 		String url = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a="+agencyTag+"&r="+routeTag+"&s="+stopTag;
-		List <HashMap <String, String>> rawObjects = Parser.parse(wanted, url);
+		List<HashMap<String, String>> rawObjects = null;
+		try {
+			rawObjects = Parser.parse(wanted, new URL (url));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		List <Prediction> predictions = new ArrayList <Prediction> ();
 		for (int x = 0; x < rawObjects.size();x++){
 			predictions.add(new Prediction (rawObjects.get(x)));
@@ -117,5 +151,24 @@ public class Commands {
 			e.printStackTrace();
 		}
 		return vehicles;
+	}
+	
+	public static void getStopHeaders (){
+		try {
+			URL url = new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=schedule&a=ttc&r=36");
+			XmlTagFilter routeFilter = new XmlTagFilter (2, "route");
+			routeFilter.setAttrributeSpec("direction", "East");
+			routeFilter.setAttrributeSpec("serviceClass","wkd");
+			XmlTagFilter headerFilter = new XmlTagFilter (3,"header");
+			XmlTagFilter wanted = new XmlTagFilter (4,"stop");
+			List <HashMap <String, String>> list = Parser.parse(wanted, url, routeFilter, headerFilter);
+			System.out.println ("Size is " + list.size());
+			/*for (HashMap <String,String> m : list){
+				System.out.println (m.get("tag"));
+			}*/
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
