@@ -1,5 +1,7 @@
 package com.andrei.nextbusbridge;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +33,15 @@ public class Commands {
 	}
 	
 	public static List <Path> getPathsForRoute (String agencyTag, String routeTag){
-		return Parser.parsePaths("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag);
+		try {
+			return Parser.parsePaths(new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
+	
 	
 	public static List <Route> getRoutes(String agencyTag){
 		XmlTagFilter wanted = new XmlTagFilter (2,"route");
