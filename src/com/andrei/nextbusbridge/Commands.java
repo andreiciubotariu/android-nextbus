@@ -171,4 +171,26 @@ public class Commands {
 			e.printStackTrace();
 		}
 	}
+	
+	public List <Route> getSheduleForRoute (String agencyTag, String routeTag){
+		return null;
+	}
+	
+	//Object --> Determine what class to use for this
+	public List <Object> getPredictionsForMultiStops (String agencyTag, AgencyStopTuple ... stops){
+		StringBuilder s = new StringBuilder ("http://webservices.nextbus.com/service/publicXMLFeed?command=predictionsForMultiStops&a=")
+		.append(agencyTag);
+		for (int x = 0; x < stops.length;x++){
+			s.append("&stops=")
+			.append (stops[x]);
+		}
+		try {
+			URL url = new URL (s.toString());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 }
