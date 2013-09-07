@@ -336,13 +336,12 @@ public class Parser {
 			return list;
 		}
 
-
+		RouteSchedule r = null;
+		ScheduledStop s = null;
+		TimeTuple t = null;
+		int inHeader =  -1;
 		try {
-			RouteSchedule r = null;
-			ScheduledStop s = null;
-			TimeTuple t = null;
-			boolean inStop = false;
-			boolean inHeader = false;
+			
 			XmlPullParser xpp = initParser (xmlContent);
 			int eventType = xpp.getEventType();
 
@@ -361,7 +360,7 @@ public class Parser {
 						r = new RouteSchedule (attributes);
 					}
 					else if (nodeName.equals("header")){
-						inHeader = true;
+						inHeader = 1;
 					}
 					else if (nodeName.equals ("stop")){
 						String tag = null;
@@ -374,7 +373,7 @@ public class Parser {
 								epochTime = xpp.getAttributeValue(x).trim();
 							}
 						}
-						if (inHeader){
+						if (inHeader == 1){
 							s = new ScheduledStop (tag);
 						}
 						else {
@@ -384,12 +383,12 @@ public class Parser {
 						}
 					}
 				}
-				else if (eventType == XmlPullParser.TEXT){
+				else if (eventType == XmlPullParser.TEXT && xpp.getText() != null && xpp.getText().trim().length() > 0){
 				//	Log.i("TEXT", xpp.getName());
-					if (inHeader && s != null){
+					if (inHeader == 1/* && s != null*/){
 						s.setTitle(xpp.getText());
 					}
-					else if (t != null ){
+					else if (inHeader == 0 /*t != null*/ ){
 						t.readableTime = xpp.getText();
 					}
 				}
@@ -399,10 +398,10 @@ public class Parser {
 						list.add(r);
 					}
 					else if (name.equals ("header")){
-						inHeader = false;
+						inHeader = 0;
 					}
 					else if (name.equals ("stop")){
-						if (inHeader){
+						if (inHeader == 1){
 							r.addScheduledStop(s.getTag(), s);
 						}
 						else {
@@ -417,6 +416,13 @@ public class Parser {
 		catch (XmlPullParserException e) {
 			e.printStackTrace();
 			return list;
+		}
+		finally {
+			System.out.println ("s: " + s);
+			System.out.println ("r " +  r);
+			System.out.println("t: " + t);
+			System.out.println ("inHeader: " + inHeader);
+			System.gc();
 		}
 	}
 
