@@ -193,29 +193,39 @@ public class Commands {
 	
 	
 	//Object --> Determine what class to use for this
-	public List <Object> getPredictionsForMultiStops (String agencyTag, AgencyStopTuple ... stops){
+	public static List <MultiStopPredictions> getPredictionsForMultiStops (String agencyTag, AgencyStopTuple ... stops){
 		StringBuilder s = new StringBuilder ("http://webservices.nextbus.com/service/publicXMLFeed?command=predictionsForMultiStops&a=")
 		.append(agencyTag);
 		for (int x = 0; x < stops.length;x++){
 			s.append("&stops=")
-			.append (stops[x]);
+			.append (stops[x].getConcatedTuple());
 		}
+		List <MultiStopPredictions> predictions = new ArrayList <MultiStopPredictions> ();
 		try {
 			URL url = new URL (s.toString());
 			String content = Parser.getXmlAsString(url);
-			XmlTagFilter wanted = new XmlTagFilter (2, "predictions");
-			List <HashMap <String,String>> rawObjects = Parser.parse(wanted, content);
-			List <MultiStopPredictions> predictions = new ArrayList <MultiStopPredictions> ();
+			XmlTagFilter prediction = new XmlTagFilter (2, "predictions");
+			List <HashMap <String,String>> rawObjects = Parser.parse(prediction, content);
 			for (int x = 0; x < rawObjects.size();x++){
 				MultiStopPredictions m = new MultiStopPredictions (rawObjects.get(x));
 				predictions.add(m);
+				prediction.setAttrributeSpec("stopTag", m.attribs.get("stopTag"));
+				XmlTagFilter pred = new XmlTagFilter (4,"prediction");
+				List <HashMap <String,String>> rawPreds = Parser.parse(pred, content, prediction);
+				List <Prediction> preds = new ArrayList <Prediction> ();
+				for (int y = 0; y <  rawPreds.size();y++){
+					preds.add (new Prediction (rawPreds.get(x)));
+				}
+				MSDir d = new MSDir ();
+				d.predictions = preds;
+				List <MSDir> l = new ArrayList <MSDir> ();
+				l.add(d);
+				m.directions = l; 
 			}	
-			
-			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return predictions;
 	}
 }
