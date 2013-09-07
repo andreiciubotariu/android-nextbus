@@ -1,6 +1,8 @@
 package com.andrei.nextbusbridge;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -18,8 +20,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-
-import android.util.Log;
 
 import com.andrei.nextbusbridge.Message.ConfiguredRoute;
 import com.andrei.nextbusbridge.Message.ConfiguredStop;
@@ -326,28 +326,31 @@ public class Parser {
 	}
 
 	public static List <RouteSchedule> parseSchedule (URL xmlUrl){
-
-		String xmlContent = null;
 		List<RouteSchedule> list = new ArrayList <RouteSchedule> ();
 
-		xmlContent = getXmlAsString(xmlUrl);
-
-		if (xmlContent == null){
-			return list;
-		}
-
+		HttpURLConnection urlConnection;
 		RouteSchedule r = null;
 		ScheduledStop s = null;
 		TimeTuple t = null;
+		XmlPullParser xpp = null;
+		BufferedReader b;
 		int inHeader =  -1;
 		try {
+			urlConnection = (HttpURLConnection) xmlUrl.openConnection();
+			urlConnection.setConnectTimeout(5000);
+			urlConnection.setReadTimeout(10000);
+			b = new BufferedReader (new InputStreamReader (urlConnection.getInputStream()));
+			XmlPullParserFactory factory;
+			factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(true);
 			
-			XmlPullParser xpp = initParser (xmlContent);
+			xpp = factory.newPullParser();
+			factory = null;
+			xpp.setInput(b);
 			int eventType = xpp.getEventType();
 
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
-					System.out.println (xpp.getName().trim());
 					String nodeName = xpp.getName().trim();
 					if (nodeName.equals("route")){
 						Map <String,String> attributes = new HashMap <String,String> ();
@@ -417,11 +420,23 @@ public class Parser {
 			e.printStackTrace();
 			return list;
 		}
+		catch (IOException e){
+			e.printStackTrace();
+			return list;
+		}
 		finally {
-			System.out.println ("s: " + s);
-			System.out.println ("r " +  r);
-			System.out.println("t: " + t);
-			System.out.println ("inHeader: " + inHeader);
+			s = null;
+			t = null;
+			r = null;
+			b  = null;
+			if (xpp != null){
+				try {
+					xpp.setInput(null);
+				} catch (XmlPullParserException e) {
+					e.printStackTrace();
+				}
+			}
+			xpp = null;
 			System.gc();
 		}
 	}
@@ -442,7 +457,7 @@ public class Parser {
 
 	}
 
-	private static String getXmlAsString (URL url){
+	public static String getXmlAsString (URL url){
 		try {
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setConnectTimeout(5000);

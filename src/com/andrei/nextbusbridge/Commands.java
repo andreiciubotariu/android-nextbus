@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Commands {
 
@@ -176,6 +177,21 @@ public class Commands {
 		return null;
 	}
 	
+	public static class MultiStopPredictions {
+		public List <MSDir> directions = new ArrayList <MSDir> ();
+		public Map <String,String> attribs;
+		
+		public MultiStopPredictions (Map <String,String> attribs){
+			this.attribs = attribs;
+		}
+	}
+	
+	public static class MSDir {
+		public Map <String,String> attribs; 
+		public List <Prediction> predictions = new ArrayList <Prediction> ();
+	}
+	
+	
 	//Object --> Determine what class to use for this
 	public List <Object> getPredictionsForMultiStops (String agencyTag, AgencyStopTuple ... stops){
 		StringBuilder s = new StringBuilder ("http://webservices.nextbus.com/service/publicXMLFeed?command=predictionsForMultiStops&a=")
@@ -186,11 +202,20 @@ public class Commands {
 		}
 		try {
 			URL url = new URL (s.toString());
+			String content = Parser.getXmlAsString(url);
+			XmlTagFilter wanted = new XmlTagFilter (2, "predictions");
+			List <HashMap <String,String>> rawObjects = Parser.parse(wanted, content);
+			List <MultiStopPredictions> predictions = new ArrayList <MultiStopPredictions> ();
+			for (int x = 0; x < rawObjects.size();x++){
+				MultiStopPredictions m = new MultiStopPredictions (rawObjects.get(x));
+				predictions.add(m);
+			}	
+			
+			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-		
 	}
 }
