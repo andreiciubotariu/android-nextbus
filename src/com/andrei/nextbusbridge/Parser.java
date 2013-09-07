@@ -7,7 +7,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +75,7 @@ public class Parser {
 								break;
 							}
 						}
-						
+
 						if (currentFilterFulfilled){
 							currentFilter++;
 							if (currentFilter == filters.length){
@@ -97,7 +99,7 @@ public class Parser {
 				else if (eventType == XmlPullParser.END_TAG){
 					int prevFilter = currentFilter - 1;
 					if (filtered && prevFilter >= 0 && filters [prevFilter] != null && xpp.getName().trim().equals(filters [prevFilter].getTag()) && xpp.getDepth() == filters [prevFilter].getDepth()){
-					//if (filtered && (filterFulfilled || currentFilter > 0 && filters [currentFilter] != null && xpp.getDepth() == filters [currentFilter].getDepth())){
+						//if (filtered && (filterFulfilled || currentFilter > 0 && filters [currentFilter] != null && xpp.getDepth() == filters [currentFilter].getDepth())){
 						filterFulfilled = false;
 						currentFilter --;
 					}
@@ -240,9 +242,9 @@ public class Parser {
 					else if (name.equals ("stop") && s!= null && r != null){
 						r.addConfiguredStop(s);
 					}
-					
+
 				}
-				
+
 				eventType = tryToGetNext(xpp);
 			}
 		} catch (XmlPullParserException e) {
@@ -250,6 +252,172 @@ public class Parser {
 			e.printStackTrace();
 		}
 		return messages;
+	}
+
+	public static class TimeTuple {
+		public String epochTime;
+		public String readableTime;
+
+
+		/*public long getEpochTime (){
+			return epochTime;
+		}
+
+		public String getReadableTime (){
+			return readableTime;
+		}*/
+	}
+
+	public static class ScheduledStop {
+		private List <TimeTuple> times;
+		private String tag;
+		private String title;
+
+		public ScheduledStop (String tag){
+			this.tag = tag;
+			times = new ArrayList <TimeTuple>();
+		}
+
+		public void addTime (TimeTuple t){
+			times.add(t);
+		}
+
+		public String getTag () {
+			return tag;
+		}
+		public String getTitle (){
+			return title;
+		}
+
+		public void setTitle (String title){
+			this.title = title;
+		}
+
+		public List <TimeTuple> getTimes (){
+			return times;
+		}
+	}
+
+
+	public static class RouteSchedule {
+		private Map <String, ScheduledStop> stops;
+		private Map <String,String> attributes;
+
+		public  RouteSchedule (Map <String,String> attributes){
+			this.attributes = attributes;
+			this.stops = new LinkedHashMap <String,ScheduledStop> ();
+		}
+
+		public String getAttribute (String tag){
+			return attributes.get(tag);
+		}
+
+		public Collection <ScheduledStop> getStops(){
+			return stops.values();
+		}
+
+		public ScheduledStop getStop (String stopTag){
+			return stops.get(stopTag);
+		}
+
+		public void addScheduledStop (String stopTag, ScheduledStop stop){
+			stops.put(stopTag,stop);
+		}
+	}
+
+	public static List <RouteSchedule> parseSchedule (URL xmlUrl){
+
+		String xmlContent = null;
+		List<RouteSchedule> list = new ArrayList <RouteSchedule> ();
+
+		xmlContent = getXmlAsString(xmlUrl);
+
+		if (xmlContent == null){
+			return list;
+		}
+
+
+		try {
+			RouteSchedule r = null;
+			ScheduledStop s = null;
+			TimeTuple t = null;
+			boolean inStop = false;
+			boolean inHeader = false;
+			XmlPullParser xpp = initParser (xmlContent);
+			int eventType = xpp.getEventType();
+
+			while (eventType != XmlPullParser.END_DOCUMENT){
+				if(eventType == XmlPullParser.START_TAG) {
+					System.out.println (xpp.getName().trim());
+					String nodeName = xpp.getName().trim();
+					if (nodeName.equals("route")){
+						Map <String,String> attributes = new HashMap <String,String> ();
+						for (int x = 0; x < xpp.getAttributeCount();x++){
+							String name = xpp.getAttributeName(x).trim();
+							String value = xpp.getAttributeValue(x).trim();
+
+							attributes.put (name, value);
+						}
+						r = new RouteSchedule (attributes);
+					}
+					else if (nodeName.equals("header")){
+						inHeader = true;
+					}
+					else if (nodeName.equals ("stop")){
+						String tag = null;
+						String epochTime = null;
+						for (int x = 0; x < xpp.getAttributeCount();x++){
+							if (xpp.getAttributeName(x).trim().equals ("tag")){
+								tag = xpp.getAttributeValue(x).trim();
+							}
+							else if (xpp.getAttributeName(x).trim().equals ("epochTime")){
+								epochTime = xpp.getAttributeValue(x).trim();
+							}
+						}
+						if (inHeader){
+							s = new ScheduledStop (tag);
+						}
+						else {
+							s = r.getStop(tag);
+							t = new TimeTuple ();
+							t.epochTime = epochTime;
+						}
+					}
+				}
+				else if (eventType == XmlPullParser.TEXT){
+				//	Log.i("TEXT", xpp.getName());
+					if (inHeader && s != null){
+						s.setTitle(xpp.getText());
+					}
+					else if (t != null ){
+						t.readableTime = xpp.getText();
+					}
+				}
+				else if (eventType == XmlPullParser.END_TAG){
+					String name = xpp.getName().trim();
+					if (name.equals("route")){
+						list.add(r);
+					}
+					else if (name.equals ("header")){
+						inHeader = false;
+					}
+					else if (name.equals ("stop")){
+						if (inHeader){
+							r.addScheduledStop(s.getTag(), s);
+						}
+						else {
+							s.addTime(t);
+						}
+					}
+				}
+				eventType = tryToGetNext(xpp);
+			}
+			return list;
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+			return list;
+		}
 	}
 
 	private static XmlPullParser initParser (String xmlContent) throws XmlPullParserException{
