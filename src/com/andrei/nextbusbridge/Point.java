@@ -1,6 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Point {
 
@@ -12,9 +12,9 @@ public class Point {
 		mLon = getDouble (lon);
 	}
 	
-	public Point (HashMap<String,String> values){
-		mLat = getDouble (values.get("lat"));
-		mLon = getDouble (values.get("lon"));
+	public Point (Map<String, String> node){
+		mLat = getDouble (node.get("lat"));
+		mLon = getDouble (node.get("lon"));
 	}
 
 	private static double  getDouble (String value){

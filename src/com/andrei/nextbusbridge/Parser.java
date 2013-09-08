@@ -31,14 +31,14 @@ public class Parser {
 	}
 
 	public static List <Map <String, String>> parse (XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
-
-		boolean filtered = filters != null && filters.length > 0;
-		boolean filterFulfilled = !filtered;
 		List<Map <String,String>> list = new ArrayList <Map <String,String>> ();
 
-		if (xmlContent == null){
+		if (xmlContent == null || xmlContent.length() == 0){
 			return list;
 		}
+		
+		boolean filtered = filters != null && filters.length > 0;
+		boolean filterFulfilled = !filtered;
 
 		int currentFilter = 0;
 		try {
@@ -48,34 +48,21 @@ public class Parser {
 
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
-					//System.out.println (xpp.getName().trim());
-					//Log.i ("FILTER", ""+currentFilter);
-					/*if (filters.length > 0){
-						System.out.println ("Name: " + filters [currentFilter].getTag());
-						System.out.println ("filtered: " + filtered);
-						System.out.println ("Not filter fulfilled: " + !filterFulfilled);
-						System.out.println ("currentFilter" +  currentFilter);
-						System.out.println ("filters.length" + filters.length);
-						System.out.println ("Current filter object" + filters [currentFilter]);
-						System.out.println ("Same name: " +xpp.getName().trim().equals(filters [currentFilter].getTag()) + "<<|>>");
-						System.out.println (xpp.getDepth() == filters [currentFilter].getDepth());
-					}*/
-					if (filtered && !filterFulfilled && xpp.getName().trim().equals(filters [currentFilter].getTag()) && xpp.getDepth() == filters [currentFilter].getDepth()){
+					String name = xpp.getName().trim();
+					int depth = xpp.getDepth();
+					if (filtered && !filterFulfilled && name.equals(filters [currentFilter].getTag()) && depth == filters [currentFilter].getDepth()){
 						boolean currentFilterFulfilled = false;
 						int attribCount = xpp.getAttributeCount();
-						System.out.println ("attributeCount is: " + attribCount);
-						if (attribCount == 0 || xpp.getName().trim().equals ("body")){
+						if (attribCount == 0 || name.trim().equals ("body")){ //body tag contains a copyright attribute, which does not affect parsing
 							currentFilterFulfilled = true;
 						}
 						for (int x = 0; x < attribCount;x++){
-							System.out.println (String.format ("%s %s",xpp.getAttributeName(x), xpp.getAttributeName(x)));
 							if (xpp.getAttributeName(x).trim().equals (filters [currentFilter].getAttribute()) && 
 									xpp.getAttributeValue(x).trim().equals(filters [currentFilter].getAttributeValue())){
 								currentFilterFulfilled = true;
 								break;
 							}
 						}
-
 						if (currentFilterFulfilled){
 							currentFilter++;
 							if (currentFilter == filters.length){
@@ -83,14 +70,8 @@ public class Parser {
 							}
 						}
 					}
-					else if (filterFulfilled && xpp.getName().trim().equals(wanted.getTag()) && xpp.getDepth() == wanted.getDepth()){
-						HashMap <String,String> node = new HashMap <String,String>();
-						for (int x = 0; x < xpp.getAttributeCount();x++){
-							String name = xpp.getAttributeName(x).trim();
-							String value = xpp.getAttributeValue(x).trim();
-							//System.out.println (name + " #####|##### "+ value);
-							node.put (name, value);
-						}
+					else if (filterFulfilled && name.equals(wanted.getTag()) && depth == wanted.getDepth()){
+						Map <String,String> node = getAttributes(xpp);
 						if (!node.isEmpty()){
 							list.add(node);
 						}
@@ -99,16 +80,9 @@ public class Parser {
 				else if (eventType == XmlPullParser.END_TAG){
 					int prevFilter = currentFilter - 1;
 					if (filtered && prevFilter >= 0 && filters [prevFilter] != null && xpp.getName().trim().equals(filters [prevFilter].getTag()) && xpp.getDepth() == filters [prevFilter].getDepth()){
-						//if (filtered && (filterFulfilled || currentFilter > 0 && filters [currentFilter] != null && xpp.getDepth() == filters [currentFilter].getDepth())){
 						filterFulfilled = false;
 						currentFilter --;
 					}
-					/*else {
-						filtersCompleted++;
-					}
-					if (filtersCompleted < 0){
-						filtersCompleted = 0;
-					}*/
 				}
 				eventType = tryToGetNext(xpp);
 			}
@@ -127,36 +101,28 @@ public class Parser {
 			return list;
 		}
 
-
 		try {
 			XmlPullParser xpp = initParser (xmlContent);
 			int eventType = xpp.getEventType();
 
-			Path path = new Path();
+			Path currentPath = new Path();
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
-					System.out.println (xpp.getName().trim());
 					String nodeName = xpp.getName().trim();
 					if (nodeName.equals("path")){
-						path = new Path ();
+						currentPath = new Path ();
 					}
 					else if (nodeName.equals("point")){
-						HashMap <String, String> node = new HashMap <String,String>();
-						for (int x = 0; x < xpp.getAttributeCount();x++){
-							String name = xpp.getAttributeName(x).trim();
-							String value = xpp.getAttributeValue(x).trim();
-
-							node.put (name, value);
-						}
+						Map <String, String> node = getAttributes(xpp);
 						if (!node.isEmpty()){
-							path.addPoint(new Point (node));
+							currentPath.addPoint(new Point (node));
 						}
 					}
 				}
 				else if (eventType == XmlPullParser.END_TAG){
 					if (xpp.getName().equals("path")){
-						list.add(path);
-						path = new Path();
+						list.add(currentPath);
+						currentPath = new Path();
 					}
 				}
 				eventType = tryToGetNext(xpp);
@@ -189,13 +155,8 @@ public class Parser {
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
 					String name = xpp.getName().trim();
-					//System.out.println (name);
 					if (name.equals ("message")){
-						Map <String, String> attribs = new HashMap <String,String> ();
-						for (int x =0; x < xpp.getAttributeCount();x++){
-							attribs.put(xpp.getAttributeName(x), xpp.getAttributeValue(x));
-						}
-						m = new Message (attribs);
+						m = new Message (getAttributes (xpp));
 					}
 					else if (name.equals("routeConfiguredForMessage")){
 						for (int x = 0; x < xpp.getAttributeCount();x++){
@@ -248,6 +209,15 @@ public class Parser {
 			e.printStackTrace();
 		}
 		return messages;
+	}
+
+	private static Map <String,String> getAttributes (XmlPullParser xpp){
+		Map <String,String> attributes = new HashMap <String,String> ();
+		int attributeCount = xpp.getAttributeCount();
+		for (int x =0; x < attributeCount ;x++){
+			attributes.put(xpp.getAttributeName(x).trim(), xpp.getAttributeValue(x).trim());
+		}
+		return attributes;
 	}
 
 	public static class TimeTuple {
@@ -339,7 +309,7 @@ public class Parser {
 			XmlPullParserFactory factory;
 			factory = XmlPullParserFactory.newInstance();
 			factory.setNamespaceAware(true);
-			
+
 			xpp = factory.newPullParser();
 			factory = null;
 			xpp.setInput(b);
@@ -349,13 +319,7 @@ public class Parser {
 				if(eventType == XmlPullParser.START_TAG) {
 					String nodeName = xpp.getName().trim();
 					if (nodeName.equals("route")){
-						Map <String,String> attributes = new HashMap <String,String> ();
-						for (int x = 0; x < xpp.getAttributeCount();x++){
-							String name = xpp.getAttributeName(x).trim();
-							String value = xpp.getAttributeValue(x).trim();
-
-							attributes.put (name, value);
-						}
+						Map <String,String> attributes = getAttributes(xpp);
 						r = new RouteSchedule (attributes);
 					}
 					else if (nodeName.equals("header")){
@@ -383,7 +347,7 @@ public class Parser {
 					}
 				}
 				else if (eventType == XmlPullParser.TEXT && xpp.getText() != null && xpp.getText().trim().length() > 0){
-				//	Log.i("TEXT", xpp.getName());
+					//	Log.i("TEXT", xpp.getName());
 					if (inHeader == 1/* && s != null*/){
 						s.setTitle(xpp.getText());
 					}
@@ -457,17 +421,12 @@ public class Parser {
 		if (url == null){
 			throw new IllegalArgumentException ("URL must not be null");
 		}
+		HttpURLConnection urlConnection = null;
 		try {
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setConnectTimeout(5000);
 			urlConnection.setReadTimeout(3000);
-			try {
-				return IOUtils.toString(url, "UTF-8");
-			}
-			finally {
-				urlConnection.disconnect();
-			}
-
+			return IOUtils.toString(url, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -477,6 +436,11 @@ public class Parser {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
+		}
+		finally {
+			if (urlConnection != null){
+				urlConnection.disconnect();
+			}
 		}
 	}
 
@@ -490,7 +454,6 @@ public class Parser {
 			e.printStackTrace();
 			return XmlPullParser.END_DOCUMENT;
 		}
-
 	}
 }
 
