@@ -1,6 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Vehicle  {
 
@@ -12,16 +12,16 @@ public class Vehicle  {
 	public Vehicle (){
 	}
 	
-	public Vehicle (HashMap <String, String> values){
-		mId = values.get("id");
-		mRouteTag = values.get("routeTag");
-		mDirTag = values.get("dirTag");
-		mLat = Double.parseDouble(values.get("lat"));
-		mLon = Double.parseDouble (values.get("lon"));
-		mSecsSinceReport =  Integer.parseInt(values.get("secsSinceReport"));
-		mPredictable = Boolean.parseBoolean(values.get("predictable"));
-		mHeading = Integer.parseInt(values.get("heading"));
-		mSpeedKmKr = Double.parseDouble(values.get("speedKmHr"));
+	public Vehicle (Map<String, String> map){
+		mId = map.get("id");
+		mRouteTag = map.get("routeTag");
+		mDirTag = map.get("dirTag");
+		mLat = Double.parseDouble(map.get("lat"));
+		mLon = Double.parseDouble (map.get("lon"));
+		mSecsSinceReport =  Integer.parseInt(map.get("secsSinceReport"));
+		mPredictable = Boolean.parseBoolean(map.get("predictable"));
+		mHeading = Integer.parseInt(map.get("heading"));
+		mSpeedKmKr = Double.parseDouble(map.get("speedKmHr"));
 	}
 	
 	public String getid() {

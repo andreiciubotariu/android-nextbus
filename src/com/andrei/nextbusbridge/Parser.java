@@ -25,16 +25,16 @@ import com.andrei.nextbusbridge.Message.ConfiguredRoute;
 import com.andrei.nextbusbridge.Message.ConfiguredStop;
 
 public class Parser {
-	public static List <HashMap <String,String>> parse (XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
+	public static List <Map <String,String>> parse (XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
 		String content = getXmlAsString(xmlUrl);
 		return parse (wanted,content,filters);
 	}
 
-	public static List <HashMap <String, String>> parse (XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
+	public static List <Map <String, String>> parse (XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
 
 		boolean filtered = filters != null && filters.length > 0;
 		boolean filterFulfilled = !filtered;
-		List<HashMap <String,String>> list = new ArrayList <HashMap <String,String>> ();
+		List<Map <String,String>> list = new ArrayList <Map <String,String>> ();
 
 		if (xmlContent == null){
 			return list;
@@ -120,12 +120,8 @@ public class Parser {
 		}
 	}
 
-	public static List <Path> parsePaths (URL xmlUrl){
-
-		String xmlContent = null;
+	public static List <Path> parsePaths (String xmlContent){
 		List<Path> list = new ArrayList <Path> ();
-
-		xmlContent = getXmlAsString(xmlUrl);
 
 		if (xmlContent == null){
 			return list;
@@ -458,6 +454,9 @@ public class Parser {
 	}
 
 	public static String getXmlAsString (URL url){
+		if (url == null){
+			throw new IllegalArgumentException ("URL must not be null");
+		}
 		try {
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setConnectTimeout(5000);

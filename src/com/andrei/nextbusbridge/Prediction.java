@@ -1,6 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Prediction {
 
@@ -13,17 +13,17 @@ public class Prediction {
 		
 	}
 	
-	public Prediction (HashMap <String, String> values){
-		mBlock = values.get("block");
-		mDirTag = values.get("dirTag");
-		mTripTag = values.get("tripTag");
-		mBranch = values.get("branch");
-		mVehicle = values.get("vehicle");
+	public Prediction (Map<String, String> map){
+		mBlock = map.get("block");
+		mDirTag = map.get("dirTag");
+		mTripTag = map.get("tripTag");
+		mBranch = map.get("branch");
+		mVehicle = map.get("vehicle");
 		
-		mEpochTime = Long.parseLong(values.get("epochTime"));
+		mEpochTime = Long.parseLong(map.get("epochTime"));
 		
-		mSeconds = Integer.parseInt (values.get("seconds"));
-		mMinutes = Integer.parseInt (values.get("minutes"));
+		mSeconds = Integer.parseInt (map.get("seconds"));
+		mMinutes = Integer.parseInt (map.get("minutes"));
 		
 		mIsDeparture = Boolean.parseBoolean("isDeparture");
 		mAffectedByLayover = Boolean.parseBoolean("affectedByLayover");

@@ -1,6 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Stop implements BaseInformationProvider {
 
@@ -11,11 +11,11 @@ public class Stop implements BaseInformationProvider {
 
 	}
 
-	public Stop (HashMap <String, String> values){
-		mTag = values.get("tag");
-		mTitle = values.get("title");
-		mStopLocation = new Point (values.get("lat"),values.get("lon"));
-		mStopId = values.get("stopId");
+	public Stop (Map<String, String> map){
+		mTag = map.get("tag");
+		mTitle = map.get("title");
+		mStopLocation = new Point (map.get("lat"),map.get("lon"));
+		mStopId = map.get("stopId");
 	}
 
 	@Override

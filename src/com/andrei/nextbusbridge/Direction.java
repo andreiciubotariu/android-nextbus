@@ -1,6 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Direction implements BaseInformationProvider{
 
@@ -8,11 +8,11 @@ public class Direction implements BaseInformationProvider{
 	private String mTag, mTitle, mName, mBranch;
 	private boolean mUseForUi = true;
 	
-	public Direction(HashMap<String, String> values) {
-		mTag = values.get("tag");
-		mTitle = values.get("title");
-		mName = values.get("name");
-		mBranch = values.get("branch");
+	public Direction(Map<String, String> map) {
+		mTag = map.get("tag");
+		mTitle = map.get("title");
+		mName = map.get("name");
+		mBranch = map.get("branch");
 		mUseForUi = Boolean.parseBoolean("useForUI");
 	}
 

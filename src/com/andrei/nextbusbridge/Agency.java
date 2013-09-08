@@ -1,6 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Agency implements BaseInformationProvider {
 
@@ -13,7 +13,7 @@ public class Agency implements BaseInformationProvider {
 		mRegionTitle = regionTitle;
 	}
 
-	public Agency (HashMap<String, String> values){
+	public Agency (Map<String, String> values){
 		mTag = values.get("tag");
 		mTitle = values.get("title");
 		mShortTitle = values.get("shortTitle");

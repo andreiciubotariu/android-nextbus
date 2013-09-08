@@ -1,6 +1,6 @@
 package com.andrei.nextbusbridge;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Route implements BaseInformationProvider {
 
@@ -11,9 +11,9 @@ public class Route implements BaseInformationProvider {
 		mTitle = title;
 	}
 	
-	public Route(HashMap<String, String> values) {
-		mTag = values.get("tag");
-		mTitle = values.get("title");
+	public Route(Map<String, String> map) {
+		mTag = map.get("tag");
+		mTitle = map.get("title");
 	}
 
 	@Override
