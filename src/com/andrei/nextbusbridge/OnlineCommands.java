@@ -95,7 +95,9 @@ public class OnlineCommands extends Commands {
 			List <Map <String,String>> rawPreds = Parser.parse(pred, content, prediction);
 			List <Prediction> preds = new ArrayList <Prediction> ();
 			for (int y = 0; y <  rawPreds.size();y++){
-				preds.add (new Prediction (rawPreds.get(x)));
+				Prediction p = new Prediction ();
+				p.init(rawPreds.get(x));
+				preds.add (p);
 			}
 			MSDir d = new MSDir ();
 			d.predictions = preds;

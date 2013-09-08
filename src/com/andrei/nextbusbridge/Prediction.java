@@ -2,7 +2,7 @@ package com.andrei.nextbusbridge;
 
 import java.util.Map;
 
-public class Prediction {
+public class Prediction implements MapReader {
 
 	private String mBlock, mDirTag, mTripTag, mBranch,mVehicle;
 	private long mEpochTime;
@@ -13,7 +13,7 @@ public class Prediction {
 		
 	}
 	
-	public Prediction (Map<String, String> map){
+	public void init (Map<String, String> map){
 		mBlock = map.get("block");
 		mDirTag = map.get("dirTag");
 		mTripTag = map.get("tripTag");

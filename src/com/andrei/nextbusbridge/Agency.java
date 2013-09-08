@@ -2,10 +2,13 @@ package com.andrei.nextbusbridge;
 
 import java.util.Map;
 
-public class Agency implements BaseInformationProvider {
+public class Agency implements BaseInformationProvider,MapReader {
 
 	private String mTag, mTitle, mShortTitle, mRegionTitle;
 
+	public Agency (){
+		
+	}
 	public Agency (String tag, String title, String shortTitle, String regionTitle){
 		mTag = tag;
 		mTitle = title;
@@ -13,7 +16,7 @@ public class Agency implements BaseInformationProvider {
 		mRegionTitle = regionTitle;
 	}
 
-	public Agency (Map<String, String> values){
+	public void init (Map<String, String> values){
 		mTag = values.get("tag");
 		mTitle = values.get("title");
 		mShortTitle = values.get("shortTitle");

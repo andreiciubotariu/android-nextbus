@@ -2,7 +2,7 @@ package com.andrei.nextbusbridge;
 
 import java.util.Map;
 
-public class Vehicle  {
+public class Vehicle implements MapReader {
 
 	private String mId, mRouteTag, mDirTag;
 	private double mLat, mLon, mSpeedKmKr;
@@ -12,7 +12,7 @@ public class Vehicle  {
 	public Vehicle (){
 	}
 	
-	public Vehicle (Map<String, String> map){
+	public void init (Map<String, String> map){
 		mId = map.get("id");
 		mRouteTag = map.get("routeTag");
 		mDirTag = map.get("dirTag");

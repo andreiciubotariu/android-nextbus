@@ -2,7 +2,7 @@ package com.andrei.nextbusbridge;
 
 import java.util.Map;
 
-public class Stop implements BaseInformationProvider {
+public class Stop implements BaseInformationProvider,MapReader {
 
 	private String mTag, mTitle, mStopId;
 	private Point mStopLocation;
@@ -11,7 +11,7 @@ public class Stop implements BaseInformationProvider {
 
 	}
 
-	public Stop (Map<String, String> map){
+	public void init (Map<String, String> map){
 		mTag = map.get("tag");
 		mTitle = map.get("title");
 		mStopLocation = new Point (map.get("lat"),map.get("lon"));

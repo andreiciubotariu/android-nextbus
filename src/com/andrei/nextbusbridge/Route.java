@@ -2,16 +2,20 @@ package com.andrei.nextbusbridge;
 
 import java.util.Map;
 
-public class Route implements BaseInformationProvider {
+public class Route implements BaseInformationProvider,MapReader {
 
 	private String mTitle, mTag;
+	
+	public Route (){
+		
+	}
 	
 	public Route (String tag, String title){
 		mTag = tag;
 		mTitle = title;
 	}
 	
-	public Route(Map<String, String> map) {
+	public void init (Map<String, String> map) {
 		mTag = map.get("tag");
 		mTitle = map.get("title");
 	}

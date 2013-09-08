@@ -6,27 +6,30 @@ import java.util.Map;
 
 public class Commands {
 
-	public static List <Agency> getAgencies (String xml){
-		List <Agency> agencies = new ArrayList <Agency>();
-		XmlTagFilter wanted = new XmlTagFilter (2,"agency");
-		List<Map<String, String>> rawObjects = Parser.parse(wanted,xml);
+	public static <T extends MapReader> List <T> getObjects (List <Map <String,String>> rawObjects, Class <T> clazz){
+		List <T> list = new ArrayList <T> ();
 		for (int x = 0; x < rawObjects.size(); x++){
-			agencies.add(new Agency (rawObjects.get(x)));
+			T obj;
+			try {
+				obj = clazz.newInstance();
+				obj.init(rawObjects.get(x));
+				list.add(obj);
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
-		return agencies;
+		return list;
+	}
+	public static List <Agency> getAgencies (String xml){
+		XmlTagFilter wanted = new XmlTagFilter (2,"agency");
+		return getObjects(Parser.parse(wanted,xml), Agency.class);
 	}
 
 	public static List <Direction> getDirections (String xml){
 		XmlTagFilter wanted = new XmlTagFilter (3,"direction");
-		return generateDirections (Parser.parse(wanted, xml));
-	}
-
-	private static List <Direction> generateDirections (List <Map <String,String>> rawObjects){
-		List <Direction> directions = new ArrayList <Direction>();
-		for (int x = 0; x < rawObjects.size(); x++){
-			directions.add(new Direction(rawObjects.get(x)));
-		}
-		return directions;
+		return getObjects(Parser.parse(wanted,xml), Direction.class);
 	}
 
 	public static List <Path> getPaths (String xml){
@@ -34,39 +37,21 @@ public class Commands {
 	}
 
 	public static List <Route> getRoutes (String xml){
-		List <Route> routes = new ArrayList <Route>();
 		XmlTagFilter wanted = new XmlTagFilter (2,"route");
-		List <Map <String, String>> rawObjects = Parser.parse(wanted, xml);
-		for (int x = 0; x < rawObjects.size(); x++){
-			routes.add(new Route (rawObjects.get(x)));
-		}
-		return routes;
+		return getObjects(Parser.parse(wanted,xml), Route.class);
 	}
 
 	public static List <Stop> getAllStops (String xml){
 		XmlTagFilter wanted = new XmlTagFilter (3,"stop");
-		List<Map<String, String>> rawObjects = Parser.parse(wanted,xml);
-		return generateStops (rawObjects);
+		return getObjects(Parser.parse(wanted,xml), Stop.class);
 	}
-
-	private static List <Stop> generateStops (List <Map <String, String>> rawObjects){
-		List <Stop> allStops = new ArrayList <Stop>();
-		for (int x = 0; x < rawObjects.size(); x++){
-			allStops.add(new Stop (rawObjects.get(x)));
-		}
-		return allStops;
-	}
-
+	
 	public static List <Stop> getStopsForDirection (String xml, String directionTag){
 		List <Stop> allStops = getAllStops (xml);
 		XmlTagFilter directionFilter = new XmlTagFilter(3, "direction");
 		directionFilter.setAttrributeSpec("tag",directionTag);
 		XmlTagFilter wanted = new XmlTagFilter(4, "stop");
-		List<Map<String, String>> rawObjects = null;
-		rawObjects = Parser.parse(wanted,xml, directionFilter);
-
-		List <Stop> filteredStops = generateStops(rawObjects);
-
+		List <Stop> filteredStops = getObjects(Parser.parse(wanted,xml,directionFilter), Stop.class);
 		List <Stop> fullFilteredStops = new ArrayList <Stop>();
 		for (int x = 0; x < allStops.size();x++){
 			for (int y = 0; y < filteredStops.size();y++){
@@ -82,22 +67,11 @@ public class Commands {
 
 	public static List <Prediction> getPredictionsForStop (String xml){
 		XmlTagFilter wanted = new XmlTagFilter (4,"prediction");
-		List<Map<String, String>> rawObjects = null;
-		rawObjects = Parser.parse(wanted, xml);
-		List <Prediction> predictions = new ArrayList <Prediction> ();
-		for (int x = 0; x < rawObjects.size();x++){
-			predictions.add(new Prediction (rawObjects.get(x)));
-		}		
-		return predictions;
+		return getObjects(Parser.parse(wanted,xml), Prediction.class);
 	}
 
 	public static List <Vehicle> getVehicles (String xml){
-		List <Vehicle> vehicles = new ArrayList <Vehicle> ();
 		XmlTagFilter wanted = new XmlTagFilter(2, "vehicle");
-		List <Map <String, String>> rawObjects = Parser.parse(wanted, xml);
-		for (int x = 0; x < rawObjects.size();x++){
-			vehicles.add(new Vehicle (rawObjects.get(x)));
-		}
-		return vehicles;
+		return getObjects(Parser.parse(wanted,xml), Vehicle.class);
 	}
 }
