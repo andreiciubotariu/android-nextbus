@@ -25,13 +25,13 @@ import com.andrei.nextbusbridge.Message.ConfiguredRoute;
 import com.andrei.nextbusbridge.Message.ConfiguredStop;
 
 public class Parser {
-	public static List <Map <String,String>> parse (XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
+	public static <T extends MapReader> List <T> parse (Class <T> clazz, XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
 		String content = getXmlAsString(xmlUrl);
-		return parse (wanted,content,filters);
+		return parse (clazz, wanted,content,filters);
 	}
 
-	public static List <Map <String, String>> parse (XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
-		List<Map <String,String>> list = new ArrayList <Map <String,String>> ();
+	public static <T extends MapReader> List <T> parse (Class <T> clazz, XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
+		List<T> list = new ArrayList <T> ();
 
 		if (xmlContent == null || xmlContent.length() == 0){
 			return list;
@@ -73,7 +73,9 @@ public class Parser {
 					else if (filterFulfilled && name.equals(wanted.getTag()) && depth == wanted.getDepth()){
 						Map <String,String> node = getAttributes(xpp);
 						if (!node.isEmpty()){
-							list.add(node);
+							T obj = clazz.newInstance();
+							obj.init(node);
+							list.add(obj);
 						}
 					}
 				}
@@ -86,12 +88,17 @@ public class Parser {
 				}
 				eventType = tryToGetNext(xpp);
 			}
-			return list;
 		}
 		catch (XmlPullParserException e) {
 			e.printStackTrace();
-			return list;
 		}
+		catch (InstantiationException e){
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e){
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	public static List <Path> parsePaths (String xmlContent){

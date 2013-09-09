@@ -61,12 +61,15 @@ public class OnlineCommands extends Commands {
 		return getVehicles (Parser.getXmlAsString(url));
 	}
 
-	public static class MultiStopPredictions {
+	public static class MultiStopPredictions implements MapReader {
 		public List <MSDir> directions = new ArrayList <MSDir> ();
 		public Map <String,String> attribs;
 
-		public MultiStopPredictions (Map <String,String> attribs){
-			this.attribs = attribs;
+		public MultiStopPredictions (){
+		}
+		
+		public void init (Map <String,String> attribs){
+				this.attribs = attribs;
 		}
 	}
 
@@ -86,19 +89,12 @@ public class OnlineCommands extends Commands {
 		URL url = createURL (s.toString());
 		String content = Parser.getXmlAsString(url);
 		XmlTagFilter prediction = new XmlTagFilter (2, "predictions");
-		List <Map <String,String>> rawObjects = Parser.parse(prediction, content);
-		for (int x = 0; x < rawObjects.size();x++){
-			MultiStopPredictions m = new MultiStopPredictions (rawObjects.get(x));
-			predictions.add(m);
+		List <MultiStopPredictions> mspreds = Parser.parse(MultiStopPredictions.class,prediction, content);
+		for (int x = 0; x < mspreds.size();x++){
+			MultiStopPredictions m = mspreds.get(x);
 			prediction.setAttrributeSpec("stopTag", m.attribs.get("stopTag"));
 			XmlTagFilter pred = new XmlTagFilter (4,"prediction");
-			List <Map <String,String>> rawPreds = Parser.parse(pred, content, prediction);
-			List <Prediction> preds = new ArrayList <Prediction> ();
-			for (int y = 0; y <  rawPreds.size();y++){
-				Prediction p = new Prediction ();
-				p.init(rawPreds.get(x));
-				preds.add (p);
-			}
+			List <Prediction> preds = Parser.parse(Prediction.class, pred, content, prediction);
 			MSDir d = new MSDir ();
 			d.predictions = preds;
 			List <MSDir> l = new ArrayList <MSDir> ();
