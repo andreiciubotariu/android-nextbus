@@ -34,7 +34,7 @@ public class Commands {
 		XmlTagFilter directionFilter = new XmlTagFilter(3, "direction");
 		directionFilter.setAttrributeSpec("tag",directionTag);
 		XmlTagFilter wanted = new XmlTagFilter(4, "stop");
-		List <Stop> filteredStops = Parser.parse(Stop.class,wanted,xml);
+		List <Stop> filteredStops = Parser.parse(Stop.class,wanted,xml, directionFilter);
 		List <Stop> fullFilteredStops = new ArrayList <Stop>();
 		for (int x = 0; x < allStops.size();x++){
 			for (int y = 0; y < filteredStops.size();y++){

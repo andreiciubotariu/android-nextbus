@@ -50,11 +50,9 @@ public class Parser {
 					String name = xpp.getName().trim();
 					int depth = xpp.getDepth();
 					if (filtered && !filterFulfilled && name.equals(filters [currentFilter].getTag()) && depth == filters [currentFilter].getDepth()){
-						boolean currentFilterFulfilled = false;
 						int attribCount = xpp.getAttributeCount();
-						if (attribCount == 0 || name.trim().equals ("body")){ //body tag contains a copyright attribute, which should be ignored
-							currentFilterFulfilled = true;
-						}
+						//body tag contains a copyright attribute, which should be ignored
+						boolean currentFilterFulfilled = attribCount == 0 || name.trim().equals ("body");
 						for (int x = 0; x < attribCount;x++){
 							if (xpp.getAttributeName(x).trim().equals (filters [currentFilter].getAttribute()) && 
 									xpp.getAttributeValue(x).trim().equals(filters [currentFilter].getAttributeValue())){
@@ -62,11 +60,8 @@ public class Parser {
 								break;
 							}
 						}
-						if (currentFilterFulfilled){
-							currentFilter++;
-							if (currentFilter == filters.length){
-								filterFulfilled = true;
-							}
+						if (currentFilterFulfilled && ++currentFilter == filters.length){
+							filterFulfilled = true;
 						}
 					}
 					else if (filterFulfilled && name.equals(wanted.getTag()) && depth == wanted.getDepth()){
