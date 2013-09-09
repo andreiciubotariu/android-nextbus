@@ -40,7 +40,7 @@ public class Commands {
 			for (int y = 0; y < filteredStops.size();y++){
 				if (allStops.get(x).getTag().equals(filteredStops.get(y).getTag())){
 					fullFilteredStops.add(allStops.get(x));
-					allStops.remove(x);
+					//allStops.remove(x);
 					break;
 				}
 			}

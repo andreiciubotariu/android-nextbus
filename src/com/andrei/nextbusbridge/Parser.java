@@ -36,7 +36,7 @@ public class Parser {
 		if (xmlContent == null || xmlContent.length() == 0){
 			return list;
 		}
-		
+
 		boolean filtered = filters != null && filters.length > 0;
 		boolean filterFulfilled = !filtered;
 
@@ -53,7 +53,7 @@ public class Parser {
 					if (filtered && !filterFulfilled && name.equals(filters [currentFilter].getTag()) && depth == filters [currentFilter].getDepth()){
 						boolean currentFilterFulfilled = false;
 						int attribCount = xpp.getAttributeCount();
-						if (attribCount == 0 || name.trim().equals ("body")){ //body tag contains a copyright attribute, which does not affect parsing
+						if (attribCount == 0 || name.trim().equals ("body")){ //body tag contains a copyright attribute, which should be ignored
 							currentFilterFulfilled = true;
 						}
 						for (int x = 0; x < attribCount;x++){
@@ -104,7 +104,7 @@ public class Parser {
 	public static List <Path> parsePaths (String xmlContent){
 		List<Path> list = new ArrayList <Path> ();
 
-		if (xmlContent == null){
+		if (xmlContent == null || xmlContent.length() == 0){
 			return list;
 		}
 
@@ -134,25 +134,18 @@ public class Parser {
 				}
 				eventType = tryToGetNext(xpp);
 			}
-			return list;
 		}
 		catch (XmlPullParserException e) {
 			e.printStackTrace();
-			return list;
 		}
+		return list;
 	}
 
-	public static List <Message> getMessages (){
+	public static List <Message> getMessages (String xmlContent){
 		List <Message> messages = new ArrayList <Message> ();
-		String xmlContent;
-		try {
-			xmlContent = getXmlAsString(new URL ("http://webservices.nextbus.com/service/publicXMLFeed?command=messages&a=sf-muni"));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (xmlContent == null || xmlContent.length() == 0){
 			return messages;
 		}
-
 		try {
 			XmlPullParser xpp = initParser(xmlContent);
 			int eventType = xpp.getEventType();
@@ -188,10 +181,10 @@ public class Parser {
 						}
 					}
 				}
-				else if(eventType == XmlPullParser.TEXT){
+				else if(eventType == XmlPullParser.TEXT && m != null){
 					//System.out.println ("text - "+ xpp.getName() + ": " +xpp.getText());
 					String text = xpp.getText().trim();
-					if (m != null && text != null && text.length() > 0){
+					if (text != null && text.length() > 0){
 						m.setText(text);
 					}
 				}
@@ -206,13 +199,10 @@ public class Parser {
 					else if (name.equals ("stop") && s!= null && r != null){
 						r.addConfiguredStop(s);
 					}
-
 				}
-
 				eventType = tryToGetNext(xpp);
 			}
 		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return messages;
@@ -313,10 +303,8 @@ public class Parser {
 			urlConnection.setConnectTimeout(5000);
 			urlConnection.setReadTimeout(10000);
 			b = new BufferedReader (new InputStreamReader (urlConnection.getInputStream()));
-			XmlPullParserFactory factory;
-			factory = XmlPullParserFactory.newInstance();
+			XmlPullParserFactory factory =  XmlPullParserFactory.newInstance();
 			factory.setNamespaceAware(true);
-
 			xpp = factory.newPullParser();
 			factory = null;
 			xpp.setInput(b);
@@ -381,15 +369,12 @@ public class Parser {
 				}
 				eventType = tryToGetNext(xpp);
 			}
-			return list;
 		}
 		catch (XmlPullParserException e) {
 			e.printStackTrace();
-			return list;
 		}
 		catch (IOException e){
 			e.printStackTrace();
-			return list;
 		}
 		finally {
 			s = null;
@@ -406,22 +391,15 @@ public class Parser {
 			xpp = null;
 			System.gc();
 		}
+		return list;
 	}
 
 	private static XmlPullParser initParser (String xmlContent) throws XmlPullParserException{
-		XmlPullParserFactory factory;
-		factory = XmlPullParserFactory.newInstance();
-
-		factory.setNamespaceAware(true);
-		XmlPullParser xpp;
-
-		xpp = factory.newPullParser();
-
-
+		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+		factory.setNamespaceAware(true); //check if needed, no namespaces provided anyways
+		XmlPullParser xpp = factory.newPullParser();
 		xpp.setInput(new StringReader (xmlContent == null ? "<notag> no tag </notag>" : xmlContent));
-
 		return xpp;
-
 	}
 
 	public static String getXmlAsString (URL url){
@@ -456,11 +434,10 @@ public class Parser {
 			return xpp.next();
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
-			return XmlPullParser.END_DOCUMENT;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return XmlPullParser.END_DOCUMENT;
 		}
+		return XmlPullParser.END_DOCUMENT;
 	}
 }
 
