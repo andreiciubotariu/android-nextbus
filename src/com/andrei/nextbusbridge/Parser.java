@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -304,7 +303,6 @@ public class Parser {
 			urlConnection.setReadTimeout(10000);
 			b = new BufferedReader (new InputStreamReader (urlConnection.getInputStream()));
 			XmlPullParserFactory factory =  XmlPullParserFactory.newInstance();
-			factory.setNamespaceAware(true);
 			xpp = factory.newPullParser();
 			factory = null;
 			xpp.setInput(b);
@@ -396,7 +394,6 @@ public class Parser {
 
 	private static XmlPullParser initParser (String xmlContent) throws XmlPullParserException{
 		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-		factory.setNamespaceAware(true); //check if needed, no namespaces provided anyways
 		XmlPullParser xpp = factory.newPullParser();
 		xpp.setInput(new StringReader (xmlContent == null ? "<notag> no tag </notag>" : xmlContent));
 		return xpp;
