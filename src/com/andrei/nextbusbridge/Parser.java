@@ -8,9 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -211,84 +209,14 @@ public class Parser {
 		return attributes;
 	}
 
-	public static class TimeTuple {
-		public String epochTime;
-		public String readableTime;
-
-
-		/*public long getEpochTime (){
-			return epochTime;
-		}
-
-		public String getReadableTime (){
-			return readableTime;
-		}*/
-	}
-
-	public static class ScheduledStop {
-		private List <TimeTuple> times;
-		private String tag;
-		private String title;
-
-		public ScheduledStop (String tag){
-			this.tag = tag;
-			times = new ArrayList <TimeTuple>();
-		}
-
-		public void addTime (TimeTuple t){
-			times.add(t);
-		}
-
-		public String getTag () {
-			return tag;
-		}
-		public String getTitle (){
-			return title;
-		}
-
-		public void setTitle (String title){
-			this.title = title;
-		}
-
-		public List <TimeTuple> getTimes (){
-			return times;
-		}
-	}
-
-
-	public static class RouteSchedule {
-		private Map <String, ScheduledStop> stops;
-		private Map <String,String> attributes;
-
-		public  RouteSchedule (Map <String,String> attributes){
-			this.attributes = attributes;
-			this.stops = new LinkedHashMap <String,ScheduledStop> ();
-		}
-
-		public String getAttribute (String tag){
-			return attributes.get(tag);
-		}
-
-		public Collection <ScheduledStop> getStops(){
-			return stops.values();
-		}
-
-		public ScheduledStop getStop (String stopTag){
-			return stops.get(stopTag);
-		}
-
-		public void addScheduledStop (String stopTag, ScheduledStop stop){
-			stops.put(stopTag,stop);
-		}
-	}
-
+	
 	public static List <RouteSchedule> parseSchedule (URL xmlUrl){
 		List<RouteSchedule> list = new ArrayList <RouteSchedule> ();
 
 		HttpURLConnection urlConnection;
 		RouteSchedule r = null;
 		ScheduledStop s = null;
-		TimeTuple t = null;
+		TimePair t = null;
 		XmlPullParser xpp = null;
 		BufferedReader b;
 		int inHeader =  -1;
@@ -329,7 +257,7 @@ public class Parser {
 						}
 						else {
 							s = r.getStop(tag);
-							t = new TimeTuple ();
+							t = new TimePair ();
 							t.epochTime = epochTime;
 						}
 					}
