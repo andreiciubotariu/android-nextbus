@@ -4,12 +4,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.andrei.nextbus.library.objects.Agency;
 import com.andrei.nextbus.library.objects.AgencyStopPair;
 import com.andrei.nextbus.library.objects.Direction;
-import com.andrei.nextbus.library.objects.MapInitializable;
+import com.andrei.nextbus.library.objects.MultiStopDirection;
+import com.andrei.nextbus.library.objects.MultiStopPredictions;
 import com.andrei.nextbus.library.objects.Path;
 import com.andrei.nextbus.library.objects.Prediction;
 import com.andrei.nextbus.library.objects.Route;
@@ -73,23 +73,6 @@ public class OnlineCommands extends Commands {
 		return getVehicles (Parser.getXmlAsString(url));
 	}
 
-	public static class MultiStopPredictions implements MapInitializable {
-		public List <MSDir> directions = new ArrayList <MSDir> ();
-		public Map <String,String> attribs;
-
-		public MultiStopPredictions (){
-		}
-		
-		public void init (Map <String,String> attribs){
-				this.attribs = attribs;
-		}
-	}
-
-	public static class MSDir {
-		public Map <String,String> attribs; 
-		public List <Prediction> predictions = new ArrayList <Prediction> ();
-	}
-
 	public static List <MultiStopPredictions> getPredictionsForMultiStops (String agencyTag, AgencyStopPair ... stops){
 		StringBuilder s = new StringBuilder ("http://webservices.nextbus.com/service/publicXMLFeed?command=predictionsForMultiStops&a=")
 		.append(agencyTag);
@@ -107,9 +90,9 @@ public class OnlineCommands extends Commands {
 			prediction.setAttrributeSpec("stopTag", m.attribs.get("stopTag"));
 			XmlTagFilter pred = new XmlTagFilter (4,"prediction");
 			List <Prediction> preds = Parser.parse(Prediction.class, pred, content, prediction);
-			MSDir d = new MSDir ();
+			MultiStopDirection d = new MultiStopDirection ();
 			d.predictions = preds;
-			List <MSDir> l = new ArrayList <MSDir> ();
+			List <MultiStopDirection> l = new ArrayList <MultiStopDirection> ();
 			l.add(d);
 			m.directions = l; 
 		}
