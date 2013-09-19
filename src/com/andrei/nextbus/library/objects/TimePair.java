@@ -1,4 +1,4 @@
-package com.andrei.nextbus.library;
+package com.andrei.nextbus.library.objects;
 
 public class TimePair {
 	public String epochTime;

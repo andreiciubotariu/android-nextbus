@@ -1,4 +1,4 @@
-package com.andrei.nextbus.library;
+package com.andrei.nextbus.library.parsers;
 
 public class XmlTagFilter {
 

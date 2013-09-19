@@ -1,4 +1,4 @@
-package com.andrei.nextbus.library;
+package com.andrei.nextbus.library.parsers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,8 +18,15 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import com.andrei.nextbus.library.Message.ConfiguredRoute;
-import com.andrei.nextbus.library.Message.ConfiguredStop;
+import com.andrei.nextbus.library.objects.MapInitializable;
+import com.andrei.nextbus.library.objects.Message;
+import com.andrei.nextbus.library.objects.Path;
+import com.andrei.nextbus.library.objects.Point;
+import com.andrei.nextbus.library.objects.RouteSchedule;
+import com.andrei.nextbus.library.objects.ScheduledStop;
+import com.andrei.nextbus.library.objects.TimePair;
+import com.andrei.nextbus.library.objects.Message.ConfiguredRoute;
+import com.andrei.nextbus.library.objects.Message.ConfiguredStop;
 
 public class Parser {
 	public static <T extends MapInitializable> List <T> parse (Class <T> clazz, XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){

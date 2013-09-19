@@ -1,4 +1,4 @@
-package com.andrei.nextbus.library;
+package com.andrei.nextbus.library.objects;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;

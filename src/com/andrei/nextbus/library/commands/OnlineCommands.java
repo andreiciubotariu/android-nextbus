@@ -1,10 +1,22 @@
-package com.andrei.nextbus.library;
+package com.andrei.nextbus.library.commands;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.andrei.nextbus.library.objects.Agency;
+import com.andrei.nextbus.library.objects.AgencyStopPair;
+import com.andrei.nextbus.library.objects.Direction;
+import com.andrei.nextbus.library.objects.MapInitializable;
+import com.andrei.nextbus.library.objects.Path;
+import com.andrei.nextbus.library.objects.Prediction;
+import com.andrei.nextbus.library.objects.Route;
+import com.andrei.nextbus.library.objects.Stop;
+import com.andrei.nextbus.library.objects.Vehicle;
+import com.andrei.nextbus.library.parsers.Parser;
+import com.andrei.nextbus.library.parsers.XmlTagFilter;
 
 public class OnlineCommands extends Commands {
 
