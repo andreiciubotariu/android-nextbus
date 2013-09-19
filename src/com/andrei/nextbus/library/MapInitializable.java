@@ -1,7 +1,7 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.util.Map;
 
-public interface MapReader {
+public interface MapInitializable {
 	public void init (Map <String,String> attributes);
 }

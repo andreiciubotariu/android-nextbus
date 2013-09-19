@@ -1,19 +1,12 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.util.Map;
 
-public class Agency implements BaseInformationProvider,MapReader {
+public class Agency implements BaseInformationProvider,MapInitializable {
 
 	private String mTag, mTitle, mShortTitle, mRegionTitle;
 
-	public Agency (){
-		
-	}
-	public Agency (String tag, String title, String shortTitle, String regionTitle){
-		mTag = tag;
-		mTitle = title;
-		mShortTitle = shortTitle;
-		mRegionTitle = regionTitle;
+	public Agency (){	
 	}
 
 	public void init (Map<String, String> values){

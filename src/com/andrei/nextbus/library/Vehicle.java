@@ -1,8 +1,8 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.util.Map;
 
-public class Vehicle implements MapReader {
+public class Vehicle implements MapInitializable {
 
 	private String mId, mRouteTag, mDirTag;
 	private double mLat, mLon, mSpeedKmKr;

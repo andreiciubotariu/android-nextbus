@@ -1,19 +1,15 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.util.Map;
 
-public class Direction implements BaseInformationProvider,MapReader{
+public class Direction implements BaseInformationProvider,MapInitializable{
 
-	public final static String [] TAGS = new String [] {"body","route","direction"};
 	private String mTag, mTitle, mName, mBranch;
 	private boolean mUseForUi = true;
 	
-	/**
-	 * Always provide a default constructor
-	 */
 	public Direction (){
-		
 	}
+	
 	public void init (Map<String, String> map) {
 		mTag = map.get("tag");
 		mTitle = map.get("title");

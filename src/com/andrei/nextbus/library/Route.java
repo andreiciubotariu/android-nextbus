@@ -1,13 +1,12 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.util.Map;
 
-public class Route implements BaseInformationProvider,MapReader {
+public class Route implements BaseInformationProvider,MapInitializable {
 
 	private String mTitle, mTag;
 	
 	public Route (){
-		
 	}
 	
 	public Route (String tag, String title){

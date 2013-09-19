@@ -1,4 +1,4 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.util.ArrayList;
 import java.util.List;

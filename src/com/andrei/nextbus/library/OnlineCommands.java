@@ -1,4 +1,4 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -61,7 +61,7 @@ public class OnlineCommands extends Commands {
 		return getVehicles (Parser.getXmlAsString(url));
 	}
 
-	public static class MultiStopPredictions implements MapReader {
+	public static class MultiStopPredictions implements MapInitializable {
 		public List <MSDir> directions = new ArrayList <MSDir> ();
 		public Map <String,String> attribs;
 
@@ -78,7 +78,7 @@ public class OnlineCommands extends Commands {
 		public List <Prediction> predictions = new ArrayList <Prediction> ();
 	}
 
-	public static List <MultiStopPredictions> getPredictionsForMultiStops (String agencyTag, AgencyStopTuple ... stops){
+	public static List <MultiStopPredictions> getPredictionsForMultiStops (String agencyTag, AgencyStopPair ... stops){
 		StringBuilder s = new StringBuilder ("http://webservices.nextbus.com/service/publicXMLFeed?command=predictionsForMultiStops&a=")
 		.append(agencyTag);
 		for (int x = 0; x < stops.length;x++){

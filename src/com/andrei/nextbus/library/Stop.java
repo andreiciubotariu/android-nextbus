@@ -1,14 +1,13 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.util.Map;
 
-public class Stop implements BaseInformationProvider,MapReader {
+public class Stop implements BaseInformationProvider,MapInitializable {
 
 	private String mTag, mTitle, mStopId;
 	private Point mStopLocation;
 
 	public Stop (){
-
 	}
 
 	public void init (Map<String, String> map){

@@ -1,8 +1,8 @@
-package com.andrei.nextbusbridge;
+package com.andrei.nextbus.library;
 
 import java.util.Map;
 
-public class Prediction implements MapReader {
+public class Prediction implements MapInitializable {
 
 	private String mBlock, mDirTag, mTripTag, mBranch,mVehicle;
 	private long mEpochTime;
@@ -10,7 +10,6 @@ public class Prediction implements MapReader {
 	private boolean mIsDeparture, mAffectedByLayover, mIsSheduleBased, mDelayed;
 	
 	public Prediction (){
-		
 	}
 	
 	public void init (Map<String, String> map){
