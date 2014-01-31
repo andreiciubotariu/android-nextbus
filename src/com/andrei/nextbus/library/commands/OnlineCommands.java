@@ -29,7 +29,7 @@ public class OnlineCommands extends Commands {
 		}
 	}
 
-	public static List <Agency> getAgencies(){
+	public static List <Agency> OgetAgencies(){
 		URL url = createURL ("http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList");
 		return getAgencies (Parser.getXmlAsString(url));
 	}
@@ -45,7 +45,7 @@ public class OnlineCommands extends Commands {
 	}
 
 
-	public static List <Route> getRoutes(String agencyTag){
+	public static List <Route> OgetRoutes(String agencyTag){
 		URL url = createURL("http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a="+agencyTag);
 		return getRoutes (Parser.getXmlAsString(url));
 	}

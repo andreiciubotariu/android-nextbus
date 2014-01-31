@@ -18,6 +18,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.util.Log;
+
 import com.andrei.nextbus.library.objects.MapInitializable;
 import com.andrei.nextbus.library.objects.Message;
 import com.andrei.nextbus.library.objects.Path;
@@ -207,8 +209,14 @@ public class Parser {
 		return messages;
 	}
 
+	private static Map <String,String> attributes = new HashMap <String,String> ();
 	private static Map <String,String> getAttributes (XmlPullParser xpp){
-		Map <String,String> attributes = new HashMap <String,String> ();
+		//Map <String,String> attributes = new HashMap <String,String> ();
+		if (attributes == null){
+			attributes = new HashMap <String,String> ();
+			Log.w("Parser","Making a new HashMap");
+		}
+		attributes.clear();
 		int attributeCount = xpp.getAttributeCount();
 		for (int x =0; x < attributeCount ;x++){
 			attributes.put(xpp.getAttributeName(x).trim(), xpp.getAttributeValue(x).trim());
