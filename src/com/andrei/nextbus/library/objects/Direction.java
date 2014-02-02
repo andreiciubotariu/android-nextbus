@@ -59,4 +59,10 @@ public class Direction implements BaseInformationProvider,MapInitializable{
 	public void setForUI (boolean forUI){
 		mUseForUi = forUI;
 	}
+
+	@Override
+	public void add(MapInitializable m) {
+		// TODO Auto-generated method stub
+		
+	}
 }

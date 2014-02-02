@@ -125,4 +125,10 @@ public class Prediction implements MapInitializable {
 	public void setMinutes(int minutes) {
 		this.mMinutes = minutes;
 	}
+
+	@Override
+	public void add(MapInitializable m) {
+		// TODO Auto-generated method stub
+		
+	}
 }

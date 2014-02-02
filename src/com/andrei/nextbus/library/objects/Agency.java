@@ -33,4 +33,10 @@ public class Agency implements BaseInformationProvider,MapInitializable {
 	public String getmRegionTitle() {
 		return mRegionTitle;
 	}
+
+	@Override
+	public void add(MapInitializable m) {
+		// TODO Auto-generated method stub
+		
+	}
 }

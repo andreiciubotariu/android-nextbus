@@ -14,4 +14,10 @@ public  class MultiStopPredictions implements MapInitializable {
 	public void init (Map <String,String> attribs){
 			this.attribs = attribs;
 	}
+
+	@Override
+	public void add(MapInitializable m) {
+		// TODO Auto-generated method stub
+		
+	}
 }

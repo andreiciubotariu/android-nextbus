@@ -50,4 +50,10 @@ public class Stop implements BaseInformationProvider,MapInitializable {
 	public void setLocation (Point newLoc){
 		mStopLocation = newLoc;
 	}
+
+	@Override
+	public void add(MapInitializable m) {
+		// TODO Auto-generated method stub
+		
+	}
 }

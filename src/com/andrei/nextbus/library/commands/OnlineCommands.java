@@ -5,14 +5,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.SparseArray;
+
 import com.andrei.nextbus.library.objects.Agency;
-import com.andrei.nextbus.library.objects.AgencyStopPair;
 import com.andrei.nextbus.library.objects.Direction;
 import com.andrei.nextbus.library.objects.MultiStopDirection;
 import com.andrei.nextbus.library.objects.MultiStopPredictions;
 import com.andrei.nextbus.library.objects.Path;
 import com.andrei.nextbus.library.objects.Prediction;
+import com.andrei.nextbus.library.objects.Predictions;
 import com.andrei.nextbus.library.objects.Route;
+import com.andrei.nextbus.library.objects.RouteStopPair;
 import com.andrei.nextbus.library.objects.Stop;
 import com.andrei.nextbus.library.objects.Vehicle;
 import com.andrei.nextbus.library.parsers.Parser;
@@ -54,6 +57,11 @@ public class OnlineCommands extends Commands {
 		URL url = createURL("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag);
 		return getAllStops (Parser.getXmlAsString(url));
 	}
+	
+	public static List <Stop> newGetAllStops(String agencyTag, String routeTag){
+		URL url = createURL("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag);
+		return newGetAllStops (Parser.getXmlAsString(url));
+	}
 
 	public static List <Stop> getAllStopsForDirection (String agencyTag, String routeTag, String directionTag){
 		URL url = createURL("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="+agencyTag+"&r="+routeTag);
@@ -73,7 +81,22 @@ public class OnlineCommands extends Commands {
 		return getVehicles (Parser.getXmlAsString(url));
 	}
 
-	public static List <MultiStopPredictions> getPredictionsForMultiStops (String agencyTag, AgencyStopPair ... stops){
+	public static List <Predictions> newGetPredictionsForMultiStops (String agencyTag, RouteStopPair ... stops){
+		StringBuilder s = new StringBuilder ("http://webservices.nextbus.com/service/publicXMLFeed?command=predictionsForMultiStops&a=")
+		.append(agencyTag);
+		for (int x = 0; x < stops.length;x++){
+			s.append("&stops=")
+			.append (stops[x].getConcatedTuple());
+		}
+		URL url = createURL (s.toString());
+		XmlTagFilter main = new XmlTagFilter (2, "predictions");
+		SparseArray<XmlTagFilter> children = new SparseArray<XmlTagFilter>();
+		XmlTagFilter prediction = new XmlTagFilter(4, "prediction", Prediction.class, main);
+		children.append(prediction.getDepth(),prediction);
+		return Parser.newParse(Predictions.class, Parser.getXmlAsString(url), main, children, null);
+		
+	}
+	public static List <MultiStopPredictions> getPredictionsForMultiStops (String agencyTag, RouteStopPair ... stops){
 		StringBuilder s = new StringBuilder ("http://webservices.nextbus.com/service/publicXMLFeed?command=predictionsForMultiStops&a=")
 		.append(agencyTag);
 		for (int x = 0; x < stops.length;x++){

@@ -19,16 +19,17 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.andrei.nextbus.library.objects.MapInitializable;
 import com.andrei.nextbus.library.objects.Message;
+import com.andrei.nextbus.library.objects.Message.ConfiguredRoute;
+import com.andrei.nextbus.library.objects.Message.ConfiguredStop;
 import com.andrei.nextbus.library.objects.Path;
 import com.andrei.nextbus.library.objects.Point;
 import com.andrei.nextbus.library.objects.RouteSchedule;
 import com.andrei.nextbus.library.objects.ScheduledStop;
 import com.andrei.nextbus.library.objects.TimePair;
-import com.andrei.nextbus.library.objects.Message.ConfiguredRoute;
-import com.andrei.nextbus.library.objects.Message.ConfiguredStop;
 
 public class Parser {
 	public static <T extends MapInitializable> List <T> parse (Class <T> clazz, XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
@@ -101,6 +102,116 @@ public class Parser {
 		}
 		return list;
 	}
+
+
+
+
+	public static <T extends MapInitializable> List <T> newParse (Class <T> clazz, String xmlContent,XmlTagFilter main,SparseArray <XmlTagFilter> children, 
+			SparseArray <XmlTagFilter> filters){
+		List<T> list = new ArrayList <T> ();
+		if (xmlContent == null || xmlContent.length() == 0){
+			return list;
+		}
+
+		SparseArray <List <? extends MapInitializable>> depthListMap = new SparseArray <List<? extends MapInitializable>>();
+		depthListMap.append(main.getDepth(), list);
+
+		boolean filtered = filters != null && filters.size() > 0;
+		boolean filterFulfilled = !filtered;
+
+		int currentFilter = 0;
+		try {
+			XmlPullParser xpp = initParser (xmlContent);
+
+			int eventType = xpp.getEventType();
+
+			while (eventType != XmlPullParser.END_DOCUMENT){
+				if(eventType == XmlPullParser.START_TAG) {
+					String name = xpp.getName().trim();
+					if (filtered && !filterFulfilled && name.equals(filters.get(xpp.getDepth()).getTag())){
+						int attribCount = xpp.getAttributeCount();
+						//body tag contains a copyright attribute, which should be ignored
+						boolean currentFilterFulfilled = attribCount == 0 || name.trim().equals ("body");
+						XmlTagFilter f = filters.get(xpp.getDepth());
+						for (int x = 0; x < attribCount;x++){
+							if (xpp.getAttributeName(x).trim().equals (f.getAttribute()) && 
+									xpp.getAttributeValue(x).trim().equals(f.getAttributeValue())){
+								currentFilterFulfilled = true;
+								break;
+							}
+						}
+						filterFulfilled = currentFilterFulfilled && ++currentFilter == filters.size();
+					}
+					else if (filterFulfilled){
+						Map <String,String> node = getAttributes(xpp);
+						if (!node.isEmpty()){
+							if (xpp.getDepth() == main.getDepth() && name.equals(main.getTag())){
+								T obj = clazz.newInstance();
+								obj.init(node);
+								list.add(obj);
+							}
+							else if (children != null){
+								XmlTagFilter currentLevel = children.get(xpp.getDepth());
+								if (currentLevel != null && name.equals(currentLevel.getTag()) && currentLevel.getParent() != null){
+									List <? extends MapInitializable> parentList = depthListMap.get(currentLevel.getParent().getDepth());
+									MapInitializable m = currentLevel.getTargetClass().newInstance();
+									m.init(node);
+									parentList.get(parentList.size()-1).add(m);
+								}
+							}
+						}
+					}
+				}
+				else if (eventType == XmlPullParser.END_TAG){
+					if (filtered && xpp.getName().trim().equals(filters.get(xpp.getDepth()).getTag())){
+						currentFilter--;
+						filterFulfilled = false;
+					}
+				}
+				eventType = tryToGetNext(xpp);
+			}
+		}
+		catch (XmlPullParserException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public static List <Path> parsePaths (String xmlContent){
 		List<Path> list = new ArrayList <Path> ();
@@ -224,7 +335,7 @@ public class Parser {
 		return attributes;
 	}
 
-	
+
 	public static List <RouteSchedule> parseSchedule (URL xmlUrl){
 		List<RouteSchedule> list = new ArrayList <RouteSchedule> ();
 

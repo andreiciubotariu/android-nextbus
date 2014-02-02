@@ -39,6 +39,11 @@ public class Commands {
 		return Parser.parse(Stop.class,wanted,xml);
 	}
 	
+	public static List<Stop> newGetAllStops(String xmlAsString) {
+		XmlTagFilter main = new XmlTagFilter (3,"stop");
+		return Parser.newParse(Stop.class, xmlAsString, main, null, null);
+	}
+	
 	public static List <Stop> getStopsForDirection (String xml, String directionTag){
 		List <Stop> allStops = getAllStops (xml);
 		XmlTagFilter directionFilter = new XmlTagFilter(3, "direction");

@@ -25,5 +25,17 @@ public class Predictions implements MapInitializable{
 	public void addPrediction (Prediction p){
 		predictionList.add(p);
 	}
+	
+	public List<Prediction> getPredictions(){
+		return predictionList;
+	}
+
+	@Override
+	public void add(MapInitializable m) {
+		if (m instanceof Prediction){
+			predictionList.add((Prediction)m);
+		}
+		
+	}
 
 }

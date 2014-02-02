@@ -28,4 +28,10 @@ public class Route implements BaseInformationProvider,MapInitializable {
 	public String getTitle() {
 		return mTitle;
 	}
+
+	@Override
+	public void add(MapInitializable m) {
+		// TODO Auto-generated method stub
+		
+	}
 }

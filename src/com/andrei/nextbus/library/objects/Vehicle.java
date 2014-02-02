@@ -78,4 +78,10 @@ public class Vehicle implements MapInitializable {
 	public void setPredictable(boolean predictable) {
 		this.mPredictable = predictable;
 	}
+
+	@Override
+	public void add(MapInitializable m) {
+		// TODO Auto-generated method stub
+		
+	}
 }
