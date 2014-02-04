@@ -62,7 +62,7 @@ public class Message {
 	}
 
 	public boolean forAllRoutes (){
-		return configuredRoutes.size() == 0;
+		return configuredRoutes.size()==0;
 	}
 
 	public void addConfiguredRoute (ConfiguredRoute route){

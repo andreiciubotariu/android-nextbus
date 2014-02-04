@@ -131,4 +131,10 @@ public class Prediction implements MapInitializable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setText(String text) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -11,7 +11,8 @@ public class Predictions implements MapInitializable{
 	private String stopTitle;
 	private String stopTag;
 	
-	private List <Prediction> predictionList = new ArrayList <Prediction>();
+	private List <BareDirection> predictionList = new ArrayList <BareDirection>();
+	private List <BareMessage> messageList = new ArrayList <BareMessage>();
 	
 	@Override
 	public void init(Map<String, String> attributes) {
@@ -22,19 +23,32 @@ public class Predictions implements MapInitializable{
 		agencyTitle = attributes.get("stopTag");
 	}
 	
-	public void addPrediction (Prediction p){
-		predictionList.add(p);
+	public void addPrediction (BareDirection d){
+		predictionList.add(d);
 	}
 	
-	public List<Prediction> getPredictions(){
+	public List<BareDirection> getDirectionsServed(){
 		return predictionList;
+	}
+	
+	public List<BareMessage> getMessages(){
+		return messageList;
 	}
 
 	@Override
 	public void add(MapInitializable m) {
-		if (m instanceof Prediction){
-			predictionList.add((Prediction)m);
+		if (m instanceof BareDirection){
+			predictionList.add((BareDirection)m);
 		}
+		else if (m instanceof BareMessage){
+			messageList.add((BareMessage)m);
+		}
+		
+	}
+
+	@Override
+	public void setText(String text) {
+		// TODO Auto-generated method stub
 		
 	}
 

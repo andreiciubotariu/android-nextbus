@@ -62,6 +62,11 @@ public class Direction implements BaseInformationProvider,MapInitializable{
 
 	@Override
 	public void add(MapInitializable m) {
+		//no implementation
+	}
+
+	@Override
+	public void setText(String text) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -6,4 +6,6 @@ public interface MapInitializable {
 	public void init (Map <String,String> attributes);
 	
 	public void add (MapInitializable m);
+	
+	public void setText(String text);
 }

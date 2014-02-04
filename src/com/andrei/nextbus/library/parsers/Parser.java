@@ -106,15 +106,21 @@ public class Parser {
 
 
 
-	public static <T extends MapInitializable> List <T> newParse (Class <T> clazz, String xmlContent,XmlTagFilter main,SparseArray <XmlTagFilter> children, 
-			SparseArray <XmlTagFilter> filters){
+	public static <T extends MapInitializable> List <T> newParse (Class <T> clazz, String xmlContent,XmlTagFilter main,HashMap <DepthTagPair,XmlTagFilter> children, 
+			SparseArray <XmlTagFilter> filters){ //change sparseArray and uses to hashmap or don't. Filters have to be linear
 		List<T> list = new ArrayList <T> ();
 		if (xmlContent == null || xmlContent.length() == 0){
 			return list;
 		}
 
-		SparseArray <List <? extends MapInitializable>> depthListMap = new SparseArray <List<? extends MapInitializable>>();
-		depthListMap.append(main.getDepth(), list);
+		HashMap <DepthTagPair,List <? extends MapInitializable>> depthListMap = new HashMap <DepthTagPair,List<? extends MapInitializable>>();
+		depthListMap.put(new DepthTagPair(main.getDepth(), main.getTag()), list);
+
+		if (children != null){
+			for (DepthTagPair k: children.keySet()){
+				depthListMap.put(k, new ArrayList<MapInitializable>());
+			}
+		}
 
 		boolean filtered = filters != null && filters.size() > 0;
 		boolean filterFulfilled = !filtered;
@@ -125,13 +131,20 @@ public class Parser {
 
 			int eventType = xpp.getEventType();
 
+			String prevTag = null;
+			String tag = null;
+			int prevDepth = -1;
+			int depth = -1;
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
-					String name = xpp.getName().trim();
-					if (filtered && !filterFulfilled && name.equals(filters.get(xpp.getDepth()).getTag())){
+					prevTag = tag;
+					tag = xpp.getName().trim();
+					prevDepth = depth;
+					depth = xpp.getDepth();
+					if (filtered && !filterFulfilled && filters.get(xpp.getDepth()) != null && tag.equals(filters.get(xpp.getDepth()).getTag())){
 						int attribCount = xpp.getAttributeCount();
 						//body tag contains a copyright attribute, which should be ignored
-						boolean currentFilterFulfilled = attribCount == 0 || name.trim().equals ("body");
+						boolean currentFilterFulfilled = attribCount == 0 || tag.trim().equals ("body");
 						XmlTagFilter f = filters.get(xpp.getDepth());
 						for (int x = 0; x < attribCount;x++){
 							if (xpp.getAttributeName(x).trim().equals (f.getAttribute()) && 
@@ -144,28 +157,53 @@ public class Parser {
 					}
 					else if (filterFulfilled){
 						Map <String,String> node = getAttributes(xpp);
-						if (!node.isEmpty()){
-							if (xpp.getDepth() == main.getDepth() && name.equals(main.getTag())){
-								T obj = clazz.newInstance();
+						//						if (!node.isEmpty()){
+						if (xpp.getDepth() == main.getDepth() && tag.equals(main.getTag())){
+							T obj = clazz.newInstance();
+							if (!node.isEmpty()){
 								obj.init(node);
-								list.add(obj);
 							}
-							else if (children != null){
-								XmlTagFilter currentLevel = children.get(xpp.getDepth());
-								if (currentLevel != null && name.equals(currentLevel.getTag()) && currentLevel.getParent() != null){
-									List <? extends MapInitializable> parentList = depthListMap.get(currentLevel.getParent().getDepth());
-									MapInitializable m = currentLevel.getTargetClass().newInstance();
+							list.add(obj);
+						}
+						else if (children != null){
+							XmlTagFilter currentLevel = children.get(new DepthTagPair(xpp.getDepth(), xpp.getName().trim()));
+							if (currentLevel != null && tag.equals(currentLevel.getTag()) && currentLevel.getParent() != null){
+								XmlTagFilter parent = currentLevel.getParent();
+								List <? extends MapInitializable> parentList = depthListMap.get(new DepthTagPair(parent.getDepth(), parent.getTag()));
+								MapInitializable m = currentLevel.getTargetClass().newInstance();
+								if (!node.isEmpty()){
 									m.init(node);
-									parentList.get(parentList.size()-1).add(m);
 								}
+								parentList.get(parentList.size()-1).add(m);
+
+								List <MapInitializable> currentList = (List<MapInitializable>) depthListMap.get(new DepthTagPair(currentLevel.getDepth(), currentLevel.getTag()));
+								currentList.add(m);
 							}
 						}
+						//						}
 					}
 				}
 				else if (eventType == XmlPullParser.END_TAG){
-					if (filtered && xpp.getName().trim().equals(filters.get(xpp.getDepth()).getTag())){
+					if (filtered && filters.get(xpp.getDepth()) != null && xpp.getName().trim().equals(filters.get(xpp.getDepth()).getTag())){
 						currentFilter--;
 						filterFulfilled = false;
+					}
+				}
+				else if (eventType == XmlPullParser.TEXT && xpp.getText() != null && xpp.getText().trim().length() > 0 && prevTag != null){
+					System.out.println ("Name is " + xpp.getName());
+					System.out.println ("PrevName is " + prevTag);
+					String text = xpp.getText();
+					System.out.println ("Text is " + text);
+					System.out.println ("Depth is " + xpp.getDepth());
+					System.out.println ("PrevDepth is " +  prevDepth);
+					System.out.println ("-----------------------------------------");
+					XmlTagFilter currentLevel = children.get(new DepthTagPair(prevDepth, prevTag));
+					if (currentLevel != null){
+						List <MapInitializable> currentList = (List<MapInitializable>) depthListMap.get(new DepthTagPair(currentLevel.getDepth(), currentLevel.getTag()));
+						if (currentList.size() > 0){
+							currentList.get(currentList.size()-1).setText(text);
+							System.out.println ("Set text");
+						}
 					}
 				}
 				eventType = tryToGetNext(xpp);

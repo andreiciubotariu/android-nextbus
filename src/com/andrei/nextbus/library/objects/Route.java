@@ -34,4 +34,10 @@ public class Route implements BaseInformationProvider,MapInitializable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setText(String text) {
+		// TODO Auto-generated method stub
+		
+	}
 }
