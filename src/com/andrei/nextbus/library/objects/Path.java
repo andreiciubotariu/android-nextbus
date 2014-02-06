@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Path implements MapInitializable{
+public class Path extends XmlObj{
 
 	private List <Point> mPoints;
 	
@@ -30,7 +30,7 @@ public class Path implements MapInitializable{
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		if (m instanceof Point){
 			mPoints.add((Point)m);
 		}

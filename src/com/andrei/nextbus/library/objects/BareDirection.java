@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BareDirection implements BaseInformationProvider,MapInitializable{
+public class BareDirection extends BaseInfoObj{
 	private String title;
 	private List <Prediction> predictions = new ArrayList <Prediction>();
 	
@@ -14,7 +14,7 @@ public class BareDirection implements BaseInformationProvider,MapInitializable{
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		if (m instanceof Prediction){
 			predictions.add((Prediction)m);
 		}

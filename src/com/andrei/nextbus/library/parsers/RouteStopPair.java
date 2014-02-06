@@ -1,4 +1,7 @@
-package com.andrei.nextbus.library.objects;
+package com.andrei.nextbus.library.parsers;
+
+import com.andrei.nextbus.library.objects.Route;
+import com.andrei.nextbus.library.objects.Stop;
 
 public class RouteStopPair {
 	private String both;

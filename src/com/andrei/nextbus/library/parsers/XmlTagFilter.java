@@ -1,6 +1,6 @@
 package com.andrei.nextbus.library.parsers;
 
-import com.andrei.nextbus.library.objects.MapInitializable;
+import com.andrei.nextbus.library.objects.XmlObj;
 
 public class XmlTagFilter {
 
@@ -11,16 +11,16 @@ public class XmlTagFilter {
 	private String wantedAttribute;
 	private String wantedAtributeValue;
 	
-	private Class <? extends MapInitializable> clazz;
+	private Class <? extends XmlObj> clazz;
 
 	public XmlTagFilter (int depth, String wantedTag){
 		this(depth,wantedTag,null);
 	}
 	
-	public XmlTagFilter (int depth, String wantedTag, Class <? extends MapInitializable> clazz){
+	public XmlTagFilter (int depth, String wantedTag, Class <? extends XmlObj> clazz){
 		this (depth, wantedTag, clazz, null);
 	}
-	public XmlTagFilter (int depth, String wantedTag, Class <? extends MapInitializable> clazz, XmlTagFilter parent){
+	public XmlTagFilter (int depth, String wantedTag, Class <? extends XmlObj> clazz, XmlTagFilter parent){
 		this.wantedDepth = depth;
 		this.wantedTag = wantedTag;
 		this.clazz = clazz;
@@ -43,7 +43,7 @@ public class XmlTagFilter {
 		return wantedAtributeValue;
 	}
 	
-	public Class <? extends MapInitializable> getTargetClass (){
+	public Class <? extends XmlObj> getTargetClass (){
 		return clazz;
 	}
 	

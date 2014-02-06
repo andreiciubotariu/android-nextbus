@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Prediction implements MapInitializable {
+public class Prediction extends XmlObj {
 
 	private String mBlock, mDirTag, mTripTag, mBranch,mVehicle;
 	private long mEpochTime;
@@ -127,7 +127,7 @@ public class Prediction implements MapInitializable {
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		// TODO Auto-generated method stub
 		
 	}

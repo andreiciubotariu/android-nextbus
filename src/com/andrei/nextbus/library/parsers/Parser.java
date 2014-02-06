@@ -21,7 +21,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.andrei.nextbus.library.objects.MapInitializable;
 import com.andrei.nextbus.library.objects.Message;
 import com.andrei.nextbus.library.objects.Message.ConfiguredRoute;
 import com.andrei.nextbus.library.objects.Message.ConfiguredStop;
@@ -30,14 +29,15 @@ import com.andrei.nextbus.library.objects.Point;
 import com.andrei.nextbus.library.objects.RouteSchedule;
 import com.andrei.nextbus.library.objects.ScheduledStop;
 import com.andrei.nextbus.library.objects.TimePair;
+import com.andrei.nextbus.library.objects.XmlObj;
 
 public class Parser {
-	public static <T extends MapInitializable> List <T> parse (Class <T> clazz, XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
+	public static <T extends XmlObj> List <T> oldparse (Class <T> clazz, XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
 		String content = getXmlAsString(xmlUrl);
-		return parse (clazz, wanted,content,filters);
+		return oldparse (clazz, wanted,content,filters);
 	}
 
-	public static <T extends MapInitializable> List <T> parse (Class <T> clazz, XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
+	public static <T extends XmlObj> List <T> oldparse (Class <T> clazz, XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
 		List<T> list = new ArrayList <T> ();
 
 		if (xmlContent == null || xmlContent.length() == 0){
@@ -106,19 +106,19 @@ public class Parser {
 
 
 
-	public static <T extends MapInitializable> List <T> newParse (Class <T> clazz, String xmlContent,XmlTagFilter main,HashMap <DepthTagPair,XmlTagFilter> children, 
+	public static <T extends XmlObj> List <T> newParse (Class <T> clazz, String xmlContent,XmlTagFilter main,HashMap <DepthTagPair,XmlTagFilter> children, 
 			SparseArray <XmlTagFilter> filters){ //change sparseArray and uses to hashmap or don't. Filters have to be linear
 		List<T> list = new ArrayList <T> ();
 		if (xmlContent == null || xmlContent.length() == 0){
 			return list;
 		}
 
-		HashMap <DepthTagPair,List <? extends MapInitializable>> depthListMap = new HashMap <DepthTagPair,List<? extends MapInitializable>>();
+		HashMap <DepthTagPair,List <? extends XmlObj>> depthListMap = new HashMap <DepthTagPair,List<? extends XmlObj>>();
 		depthListMap.put(new DepthTagPair(main.getDepth(), main.getTag()), list);
 
 		if (children != null){
 			for (DepthTagPair k: children.keySet()){
-				depthListMap.put(k, new ArrayList<MapInitializable>());
+				depthListMap.put(k, new ArrayList<XmlObj>());
 			}
 		}
 
@@ -169,14 +169,14 @@ public class Parser {
 							XmlTagFilter currentLevel = children.get(new DepthTagPair(xpp.getDepth(), xpp.getName().trim()));
 							if (currentLevel != null && tag.equals(currentLevel.getTag()) && currentLevel.getParent() != null){
 								XmlTagFilter parent = currentLevel.getParent();
-								List <? extends MapInitializable> parentList = depthListMap.get(new DepthTagPair(parent.getDepth(), parent.getTag()));
-								MapInitializable m = currentLevel.getTargetClass().newInstance();
+								List <? extends XmlObj> parentList = depthListMap.get(new DepthTagPair(parent.getDepth(), parent.getTag()));
+								XmlObj m = currentLevel.getTargetClass().newInstance();
 								if (!node.isEmpty()){
 									m.init(node);
 								}
 								parentList.get(parentList.size()-1).add(m);
 
-								List <MapInitializable> currentList = (List<MapInitializable>) depthListMap.get(new DepthTagPair(currentLevel.getDepth(), currentLevel.getTag()));
+								List <XmlObj> currentList = (List<XmlObj>) depthListMap.get(new DepthTagPair(currentLevel.getDepth(), currentLevel.getTag()));
 								currentList.add(m);
 							}
 						}
@@ -199,7 +199,7 @@ public class Parser {
 					System.out.println ("-----------------------------------------");
 					XmlTagFilter currentLevel = children.get(new DepthTagPair(prevDepth, prevTag));
 					if (currentLevel != null){
-						List <MapInitializable> currentList = (List<MapInitializable>) depthListMap.get(new DepthTagPair(currentLevel.getDepth(), currentLevel.getTag()));
+						List <XmlObj> currentList = (List<XmlObj>) depthListMap.get(new DepthTagPair(currentLevel.getDepth(), currentLevel.getTag()));
 						if (currentList.size() > 0){
 							currentList.get(currentList.size()-1).setText(text);
 							System.out.println ("Set text");
@@ -524,4 +524,3 @@ public class Parser {
 		return XmlPullParser.END_DOCUMENT;
 	}
 }
-

@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Direction implements BaseInformationProvider,MapInitializable{
+public class Direction extends BaseInfoObj{
 
 	private String mTag, mTitle, mName, mBranch;
 	private boolean mUseForUi = true;
@@ -61,7 +61,7 @@ public class Direction implements BaseInformationProvider,MapInitializable{
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		//no implementation
 	}
 

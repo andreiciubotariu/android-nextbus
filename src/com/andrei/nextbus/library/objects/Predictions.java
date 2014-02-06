@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Predictions implements MapInitializable{
+public class Predictions extends XmlObj{
 	private String agencyTitle;
 	private String routeTitle;
 	private String routeTag;
@@ -36,7 +36,7 @@ public class Predictions implements MapInitializable{
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		if (m instanceof BareDirection){
 			predictionList.add((BareDirection)m);
 		}
@@ -48,8 +48,34 @@ public class Predictions implements MapInitializable{
 
 	@Override
 	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
+		//not used
 	}
 
+	public String getAgencyTitle() {
+		return agencyTitle;
+	}
+
+	public String getRouteTitle() {
+		return routeTitle;
+	}
+
+	public String getRouteTag() {
+		return routeTag;
+	}
+
+	public String getStopTitle() {
+		return stopTitle;
+	}
+
+	public String getStopTag() {
+		return stopTag;
+	}
+
+	public List<BareDirection> getPredictionList() {
+		return predictionList;
+	}
+
+	public List<BareMessage> getMessageList() {
+		return messageList;
+	}
 }

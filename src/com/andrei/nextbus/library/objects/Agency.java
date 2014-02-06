@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Agency implements BaseInformationProvider,MapInitializable {
+public class Agency extends BaseInfoObj {
 
 	private String mTag, mTitle, mShortTitle, mRegionTitle;
 
@@ -26,23 +26,21 @@ public class Agency implements BaseInformationProvider,MapInitializable {
 		return mTitle;
 	}
 
-	public String getmShortTitle() {
+	public String getShortTitle() {
 		return mShortTitle;
 	}
 
-	public String getmRegionTitle() {
+	public String getRegionTitle() {
 		return mRegionTitle;
 	}
 
 	@Override
-	public void add(MapInitializable m) {
-		// TODO Auto-generated method stub
-		
+	public void add(XmlObj m) {
+		//not used
 	}
 
 	@Override
 	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
+		//not used
 	}
 }

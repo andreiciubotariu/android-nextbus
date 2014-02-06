@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class BareMessage implements MapInitializable {
+public class BareMessage extends XmlObj {
 	private String text;
 	private String priority;
 	
@@ -24,7 +24,7 @@ public class BareMessage implements MapInitializable {
 	}
 	
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		//no-op
 	}
 

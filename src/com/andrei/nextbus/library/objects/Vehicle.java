@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Vehicle implements MapInitializable {
+public class Vehicle extends XmlObj {
 
 	private String mId, mRouteTag, mDirTag;
 	private double mLat, mLon, mSpeedKmKr;
@@ -80,7 +80,7 @@ public class Vehicle implements MapInitializable {
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		// TODO Auto-generated method stub
 		
 	}

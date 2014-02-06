@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Point implements MapInitializable{
+public class Point extends XmlObj{
 
 	@Override
 	public int hashCode() {
@@ -73,7 +73,7 @@ public class Point implements MapInitializable{
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		// TODO Auto-generated method stub
 		
 	}

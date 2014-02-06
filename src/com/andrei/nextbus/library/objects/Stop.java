@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Stop implements BaseInformationProvider,MapInitializable {
+public class Stop extends BaseInfoObj {
 
 	private String mTag, mTitle, mStopId;
 	private Point mStopLocation;
@@ -52,7 +52,7 @@ public class Stop implements BaseInformationProvider,MapInitializable {
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Route implements BaseInformationProvider,MapInitializable {
+public class Route extends BaseInfoObj {
 
 	private String mTitle, mTag;
 	
@@ -30,7 +30,7 @@ public class Route implements BaseInformationProvider,MapInitializable {
 	}
 
 	@Override
-	public void add(MapInitializable m) {
+	public void add(XmlObj m) {
 		// TODO Auto-generated method stub
 		
 	}
