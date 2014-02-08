@@ -10,6 +10,7 @@ public class Stop extends BaseInfoObj {
 	public Stop (){
 	}
 
+	@Override
 	public void init (Map<String, String> map){
 		mTag = map.get("tag");
 		mTitle = map.get("title");
@@ -26,6 +27,7 @@ public class Stop extends BaseInfoObj {
 		this.mTag = newTag;
 	}
 
+	@Override
 	public String getTitle() {
 		return mTitle;
 	}

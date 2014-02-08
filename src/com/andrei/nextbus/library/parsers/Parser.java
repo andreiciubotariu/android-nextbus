@@ -21,9 +21,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.andrei.nextbus.library.objects.Message;
-import com.andrei.nextbus.library.objects.Message.ConfiguredRoute;
-import com.andrei.nextbus.library.objects.Message.ConfiguredStop;
+import com.andrei.nextbus.library.objects.DetailedMessage;
+import com.andrei.nextbus.library.objects.DetailedMessage.ConfiguredRoute;
+import com.andrei.nextbus.library.objects.DetailedMessage.ConfiguredStop;
 import com.andrei.nextbus.library.objects.Path;
 import com.andrei.nextbus.library.objects.Point;
 import com.andrei.nextbus.library.objects.RouteSchedule;
@@ -32,81 +32,80 @@ import com.andrei.nextbus.library.objects.TimePair;
 import com.andrei.nextbus.library.objects.XmlObj;
 
 public class Parser {
-	public static <T extends XmlObj> List <T> oldparse (Class <T> clazz, XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
-		String content = getXmlAsString(xmlUrl);
-		return oldparse (clazz, wanted,content,filters);
-	}
-
-	public static <T extends XmlObj> List <T> oldparse (Class <T> clazz, XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
-		List<T> list = new ArrayList <T> ();
-
-		if (xmlContent == null || xmlContent.length() == 0){
-			return list;
-		}
-
-		boolean filtered = filters != null && filters.length > 0;
-		boolean filterFulfilled = !filtered;
-
-		int currentFilter = 0;
-		try {
-			XmlPullParser xpp = initParser (xmlContent);
-
-			int eventType = xpp.getEventType();
-
-			while (eventType != XmlPullParser.END_DOCUMENT){
-				if(eventType == XmlPullParser.START_TAG) {
-					String name = xpp.getName().trim();
-					int depth = xpp.getDepth();
-					if (filtered && !filterFulfilled && name.equals(filters [currentFilter].getTag()) && depth == filters [currentFilter].getDepth()){
-						int attribCount = xpp.getAttributeCount();
-						//body tag contains a copyright attribute, which should be ignored
-						boolean currentFilterFulfilled = attribCount == 0 || name.trim().equals ("body");
-						for (int x = 0; x < attribCount;x++){
-							if (xpp.getAttributeName(x).trim().equals (filters [currentFilter].getAttribute()) && 
-									xpp.getAttributeValue(x).trim().equals(filters [currentFilter].getAttributeValue())){
-								currentFilterFulfilled = true;
-								break;
-							}
-						}
-						if (currentFilterFulfilled && ++currentFilter == filters.length){
-							filterFulfilled = true;
-						}
-					}
-					else if (filterFulfilled && name.equals(wanted.getTag()) && depth == wanted.getDepth()){
-						Map <String,String> node = getAttributes(xpp);
-						if (!node.isEmpty()){
-							T obj = clazz.newInstance();
-							obj.init(node);
-							list.add(obj);
-						}
-					}
-				}
-				else if (eventType == XmlPullParser.END_TAG){
-					int prevFilter = currentFilter - 1;
-					if (filtered && prevFilter >= 0 && filters [prevFilter] != null && xpp.getName().trim().equals(filters [prevFilter].getTag()) && xpp.getDepth() == filters [prevFilter].getDepth()){
-						filterFulfilled = false;
-						currentFilter --;
-					}
-				}
-				eventType = tryToGetNext(xpp);
-			}
-		}
-		catch (XmlPullParserException e) {
-			e.printStackTrace();
-		}
-		catch (InstantiationException e){
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e){
-			e.printStackTrace();
-		}
-		return list;
-	}
-
-
+//	public static <T extends XmlObj> List <T> oldparse (Class <T> clazz, XmlTagFilter wanted,URL xmlUrl,  XmlTagFilter ... filters){
+//		String content = getXmlAsString(xmlUrl);
+//		return oldparse (clazz, wanted,content,filters);
+//	}
+//
+//	public static <T extends XmlObj> List <T> oldparse (Class <T> clazz, XmlTagFilter wanted,String xmlContent, XmlTagFilter ... filters ){
+//		List<T> list = new ArrayList <T> ();
+//
+//		if (xmlContent == null || xmlContent.length() == 0){
+//			return list;
+//		}
+//
+//		boolean filtered = filters != null && filters.length > 0;
+//		boolean filterFulfilled = !filtered;
+//
+//		int currentFilter = 0;
+//		try {
+//			XmlPullParser xpp = initParser (xmlContent);
+//
+//			int eventType = xpp.getEventType();
+//
+//			while (eventType != XmlPullParser.END_DOCUMENT){
+//				if(eventType == XmlPullParser.START_TAG) {
+//					String name = xpp.getName().trim();
+//					int depth = xpp.getDepth();
+//					if (filtered && !filterFulfilled && name.equals(filters [currentFilter].getTag()) && depth == filters [currentFilter].getDepth()){
+//						int attribCount = xpp.getAttributeCount();
+//						//body tag contains a copyright attribute, which should be ignored
+//						boolean currentFilterFulfilled = attribCount == 0 || name.trim().equals ("body");
+//						for (int x = 0; x < attribCount;x++){
+//							if (xpp.getAttributeName(x).trim().equals (filters [currentFilter].getAttribute()) && 
+//									xpp.getAttributeValue(x).trim().equals(filters [currentFilter].getAttributeValue())){
+//								currentFilterFulfilled = true;
+//								break;
+//							}
+//						}
+//						if (currentFilterFulfilled && ++currentFilter == filters.length){
+//							filterFulfilled = true;
+//						}
+//					}
+//					else if (filterFulfilled && name.equals(wanted.getTag()) && depth == wanted.getDepth()){
+//						Map <String,String> node = getAttributes(xpp);
+//						if (!node.isEmpty()){
+//							T obj = clazz.newInstance();
+//							obj.init(node);
+//							list.add(obj);
+//						}
+//					}
+//				}
+//				else if (eventType == XmlPullParser.END_TAG){
+//					int prevFilter = currentFilter - 1;
+//					if (filtered && prevFilter >= 0 && filters [prevFilter] != null && xpp.getName().trim().equals(filters [prevFilter].getTag()) && xpp.getDepth() == filters [prevFilter].getDepth()){
+//						filterFulfilled = false;
+//						currentFilter --;
+//					}
+//				}
+//				eventType = tryToGetNext(xpp);
+//			}
+//		}
+//		catch (XmlPullParserException e) {
+//			e.printStackTrace();
+//		}
+//		catch (InstantiationException e){
+//			e.printStackTrace();
+//		}
+//		catch (IllegalAccessException e){
+//			e.printStackTrace();
+//		}
+//		return list;
+//	}
 
 
-	public static <T extends XmlObj> List <T> newParse (Class <T> clazz, String xmlContent,XmlTagFilter main,HashMap <DepthTagPair,XmlTagFilter> children, 
+
+	public static <T extends XmlObj> List <T> parse (Class <T> clazz, String xmlContent,XmlTagFilter main,HashMap <DepthTagPair,XmlTagFilter> children, 
 			SparseArray <XmlTagFilter> filters){ //change sparseArray and uses to hashmap or don't. Filters have to be linear
 		List<T> list = new ArrayList <T> ();
 		if (xmlContent == null || xmlContent.length() == 0){
@@ -221,92 +220,22 @@ public class Parser {
 		return list;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public static List <Path> parsePaths (String xmlContent){
-		List<Path> list = new ArrayList <Path> ();
-
-		if (xmlContent == null || xmlContent.length() == 0){
-			return list;
-		}
-
-		try {
-			XmlPullParser xpp = initParser (xmlContent);
-			int eventType = xpp.getEventType();
-
-			Path currentPath = new Path();
-			while (eventType != XmlPullParser.END_DOCUMENT){
-				if(eventType == XmlPullParser.START_TAG) {
-					String nodeName = xpp.getName().trim();
-					if (nodeName.equals("path")){
-						currentPath = new Path ();
-					}
-					else if (nodeName.equals("point")){
-						Map <String, String> node = getAttributes(xpp);
-						if (!node.isEmpty()){
-							currentPath.addPoint(new Point (node));
-						}
-					}
-				}
-				else if (eventType == XmlPullParser.END_TAG){
-					if (xpp.getName().equals("path")){
-						list.add(currentPath);
-						currentPath = new Path();
-					}
-				}
-				eventType = tryToGetNext(xpp);
-			}
-		}
-		catch (XmlPullParserException e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
-
-	public static List <Message> getMessages (String xmlContent){
-		List <Message> messages = new ArrayList <Message> ();
+	public static List <DetailedMessage> getMessages (String xmlContent){
+		List <DetailedMessage> messages = new ArrayList <DetailedMessage> ();
 		if (xmlContent == null || xmlContent.length() == 0){
 			return messages;
 		}
 		try {
 			XmlPullParser xpp = initParser(xmlContent);
 			int eventType = xpp.getEventType();
-			Message m = null;
+			DetailedMessage m = null;
 			ConfiguredRoute r = null;
 			ConfiguredStop s = null;
 			while (eventType != XmlPullParser.END_DOCUMENT){
 				if(eventType == XmlPullParser.START_TAG) {
 					String name = xpp.getName().trim();
 					if (name.equals ("message")){
-						m = new Message (getAttributes (xpp));
+						m = new DetailedMessage (getAttributes (xpp));
 					}
 					else if (name.equals("routeConfiguredForMessage")){
 						for (int x = 0; x < xpp.getAttributeCount();x++){
@@ -373,7 +302,6 @@ public class Parser {
 		return attributes;
 	}
 
-
 	public static List <RouteSchedule> parseSchedule (URL xmlUrl){
 		List<RouteSchedule> list = new ArrayList <RouteSchedule> ();
 
@@ -383,7 +311,7 @@ public class Parser {
 		TimePair t = null;
 		XmlPullParser xpp = null;
 		BufferedReader b;
-		int inHeader =  -1;
+		boolean inHeader =  false;
 		try {
 			urlConnection = (HttpURLConnection) xmlUrl.openConnection();
 			urlConnection.setConnectTimeout(5000);
@@ -403,7 +331,7 @@ public class Parser {
 						r = new RouteSchedule (attributes);
 					}
 					else if (nodeName.equals("header")){
-						inHeader = 1;
+						inHeader = true;
 					}
 					else if (nodeName.equals ("stop")){
 						String tag = null;
@@ -416,7 +344,7 @@ public class Parser {
 								epochTime = xpp.getAttributeValue(x).trim();
 							}
 						}
-						if (inHeader == 1){
+						if (inHeader){
 							s = new ScheduledStop (tag);
 						}
 						else {
@@ -428,10 +356,10 @@ public class Parser {
 				}
 				else if (eventType == XmlPullParser.TEXT && xpp.getText() != null && xpp.getText().trim().length() > 0){
 					//	Log.i("TEXT", xpp.getName());
-					if (inHeader == 1/* && s != null*/){
+					if (inHeader/* && s != null*/){
 						s.setTitle(xpp.getText());
 					}
-					else if (inHeader == 0 /*t != null*/ ){
+					else if (!inHeader /*t != null*/ ){
 						t.readableTime = xpp.getText();
 					}
 				}
@@ -441,10 +369,10 @@ public class Parser {
 						list.add(r);
 					}
 					else if (name.equals ("header")){
-						inHeader = 0;
+						inHeader = false;
 					}
 					else if (name.equals ("stop")){
-						if (inHeader == 1){
+						if (inHeader){
 							r.addScheduledStop(s.getTag(), s);
 						}
 						else {

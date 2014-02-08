@@ -74,13 +74,12 @@ public class Point extends XmlObj{
 
 	@Override
 	public void add(XmlObj m) {
-		// TODO Auto-generated method stub
+		//not used
 		
 	}
 
 	@Override
 	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
+		//not used
 	}
 }

@@ -1,68 +1,41 @@
 package com.andrei.nextbus.library.objects;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Direction extends BaseInfoObj{
-
-	private String mTag, mTitle, mName, mBranch;
-	private boolean mUseForUi = true;
+	private String title;
+	private List <Prediction> predictions = new ArrayList <Prediction>();
 	
-	public Direction (){
-	}
-	
-	public void init (Map<String, String> map) {
-		mTag = map.get("tag");
-		mTitle = map.get("title");
-		mName = map.get("name");
-		mBranch = map.get("branch");
-		mUseForUi = Boolean.parseBoolean("useForUI");
-	}
-
 	@Override
-	public String getTag() {
-		return mTag;
-	}
-
-	public void setTag (String newTag){
-		mTag =  newTag;
-	}
-
-	@Override
-	public String getTitle() {
-		return mTitle;
-	}
-
-	public void setTitle (String newTitle){
-		mTitle = newTitle;
-	}
-	
-	public String getName (){
-		return mName;
-	}
-	
-	public void setName (String newName){
-		mName = newName;
-	}
-
-	public String getBranch (){
-		return mBranch;
-	}
-
-	public void setBranch (String newBranch){
-		mBranch = newBranch;
-	}
-
-	public boolean usedForUI (){
-		return mUseForUi;
-	}
-
-	public void setForUI (boolean forUI){
-		mUseForUi = forUI;
+	public void init(Map<String, String> attributes) {
+		this.title = attributes.get("title");
 	}
 
 	@Override
 	public void add(XmlObj m) {
-		//no implementation
+		if (m instanceof Prediction){
+			predictions.add((Prediction)m);
+		}
+	}
+
+	@Override
+	public String getTag() {
+		return null;
+	}
+
+	@Override
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle (String s){
+		title = s;
+	}
+	
+	public List<Prediction> getPredictions(){
+		return predictions;
 	}
 
 	@Override
@@ -70,4 +43,5 @@ public class Direction extends BaseInfoObj{
 		// TODO Auto-generated method stub
 		
 	}
+
 }

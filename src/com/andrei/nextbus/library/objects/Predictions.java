@@ -11,8 +11,8 @@ public class Predictions extends XmlObj{
 	private String stopTitle;
 	private String stopTag;
 	
-	private List <BareDirection> predictionList = new ArrayList <BareDirection>();
-	private List <BareMessage> messageList = new ArrayList <BareMessage>();
+	private List <Direction> predictionList = new ArrayList <Direction>();
+	private List <Message> messageList = new ArrayList <Message>();
 	
 	@Override
 	public void init(Map<String, String> attributes) {
@@ -23,25 +23,25 @@ public class Predictions extends XmlObj{
 		agencyTitle = attributes.get("stopTag");
 	}
 	
-	public void addPrediction (BareDirection d){
+	public void addPrediction (Direction d){
 		predictionList.add(d);
 	}
 	
-	public List<BareDirection> getDirectionsServed(){
+	public List<Direction> getDirectionsServed(){
 		return predictionList;
 	}
 	
-	public List<BareMessage> getMessages(){
+	public List<Message> getMessages(){
 		return messageList;
 	}
 
 	@Override
 	public void add(XmlObj m) {
-		if (m instanceof BareDirection){
-			predictionList.add((BareDirection)m);
+		if (m instanceof Direction){
+			predictionList.add((Direction)m);
 		}
-		else if (m instanceof BareMessage){
-			messageList.add((BareMessage)m);
+		else if (m instanceof Message){
+			messageList.add((Message)m);
 		}
 		
 	}
@@ -71,11 +71,11 @@ public class Predictions extends XmlObj{
 		return stopTag;
 	}
 
-	public List<BareDirection> getPredictionList() {
+	public List<Direction> getPredictionList() {
 		return predictionList;
 	}
 
-	public List<BareMessage> getMessageList() {
+	public List<Message> getMessageList() {
 		return messageList;
 	}
 }

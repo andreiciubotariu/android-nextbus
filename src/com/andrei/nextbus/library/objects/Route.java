@@ -30,14 +30,12 @@ public class Route extends BaseInfoObj {
 	}
 
 	@Override
-	public void add(XmlObj m) {
-		// TODO Auto-generated method stub
-		
+	public void add(XmlObj m){
+		//nothing
 	}
 
 	@Override
 	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
+		//nothing
 	}
 }

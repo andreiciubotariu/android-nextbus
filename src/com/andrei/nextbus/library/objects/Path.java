@@ -26,7 +26,7 @@ public class Path extends XmlObj{
 
 	@Override
 	public void init(Map<String, String> attributes) {
-		// TODO Auto-generated method stub
+		//not used
 	}
 
 	@Override

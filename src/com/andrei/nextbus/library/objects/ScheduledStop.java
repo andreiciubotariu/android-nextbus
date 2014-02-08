@@ -2,8 +2,9 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class ScheduledStop {
+public class ScheduledStop extends Stop{
 	private List <TimePair> times;
 	private String tag;
 	private String title;
@@ -17,9 +18,12 @@ public class ScheduledStop {
 		times.add(t);
 	}
 
+	@Override
 	public String getTag () {
 		return tag;
 	}
+	
+	@Override
 	public String getTitle (){
 		return title;
 	}
@@ -30,5 +34,20 @@ public class ScheduledStop {
 
 	public List <TimePair> getTimes (){
 		return times;
+	}
+
+	@Override
+	public void init(Map<String, String> attributes) {
+		super.init(attributes);
+	}
+
+	@Override
+	public void add(XmlObj m) {
+		//nothing
+	}
+
+	@Override
+	public void setText(String text) {
+		//nothing
 	}
 }

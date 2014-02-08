@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.andrei.nextbus.library.objects.Agency;
-import com.andrei.nextbus.library.objects.BareDirection;
-import com.andrei.nextbus.library.objects.BareMessage;
 import com.andrei.nextbus.library.objects.Direction;
+import com.andrei.nextbus.library.objects.Message;
+import com.andrei.nextbus.library.objects.DetailedDirection;
 import com.andrei.nextbus.library.objects.Path;
 import com.andrei.nextbus.library.objects.Prediction;
 import com.andrei.nextbus.library.objects.Predictions;
@@ -35,7 +35,7 @@ public class OnlineCommands extends Commands {
 		return getAgencies(Parser.getXmlAsString(url));
 	}
 
-	public List<Direction> getDirections(String agencyTag, String routeTag) {
+	public List<DetailedDirection> getDirections(String agencyTag, String routeTag) {
 		URL url = createURL("http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a="
 				+ agencyTag + "&r=" + routeTag);
 		return getDirections(Parser.getXmlAsString(url));
@@ -104,7 +104,7 @@ public class OnlineCommands extends Commands {
 		URL url = createURL(s.toString());
 		XmlTagFilter main = new XmlTagFilter(2, "predictions");
 		HashMap<DepthTagPair, XmlTagFilter> children = new HashMap<DepthTagPair, XmlTagFilter>();
-		XmlTagFilter direction = new XmlTagFilter(3, "direction",BareDirection.class, main);
+		XmlTagFilter direction = new XmlTagFilter(3, "direction",Direction.class, main);
 		children.put(
 				new DepthTagPair(direction.getDepth(), direction.getTag()),direction);
 
@@ -113,8 +113,8 @@ public class OnlineCommands extends Commands {
 				new DepthTagPair(prediction.getDepth(), prediction.getTag()),prediction);
 
 		XmlTagFilter messages = new XmlTagFilter(3, "message",
-				BareMessage.class, main);
+				Message.class, main);
 		children.put(new DepthTagPair(messages.getDepth(), messages.getTag()),messages);
-		return Parser.newParse(Predictions.class, Parser.getXmlAsString(url),main, children, null);
+		return Parser.parse(Predictions.class, Parser.getXmlAsString(url),main, children, null);
 	}
 }
