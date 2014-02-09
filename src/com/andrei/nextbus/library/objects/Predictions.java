@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.andrei.nextbus.library.objects.messages.Message;
+
 public class Predictions extends XmlObj{
 	private String agencyTitle;
 	private String routeTitle;

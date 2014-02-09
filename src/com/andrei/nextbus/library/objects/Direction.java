@@ -37,11 +37,4 @@ public class Direction extends BaseInfoObj{
 	public List<Prediction> getPredictions(){
 		return predictions;
 	}
-
-	@Override
-	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

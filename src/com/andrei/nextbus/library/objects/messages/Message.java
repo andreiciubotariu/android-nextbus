@@ -1,9 +1,10 @@
-package com.andrei.nextbus.library.objects;
+package com.andrei.nextbus.library.objects.messages;
 
 import java.util.Map;
 
+import com.andrei.nextbus.library.objects.XmlObj;
+
 public class Message extends XmlObj {
-	private String text;
 	private String priority;
 	
 	public Message(){
@@ -11,12 +12,8 @@ public class Message extends XmlObj {
 	
 	@Override
 	public void init(Map<String, String> attributes) {
-		text=attributes.get("text");
+		setText(attributes.get("text"));
 		priority=attributes.get("priority");
-	}
-
-	public String getText(){
-		return text;
 	}
 	
 	public String getPriority(){
@@ -27,11 +24,4 @@ public class Message extends XmlObj {
 	public void add(XmlObj m) {
 		//no-op
 	}
-
-	@Override
-	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

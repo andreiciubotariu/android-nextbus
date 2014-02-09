@@ -77,9 +77,4 @@ public class Point extends XmlObj{
 		//not used
 		
 	}
-
-	@Override
-	public void setText(String text) {
-		//not used
-	}
 }

@@ -45,9 +45,4 @@ public class ScheduledStop extends Stop{
 	public void add(XmlObj m) {
 		//nothing
 	}
-
-	@Override
-	public void setText(String text) {
-		//nothing
-	}
 }

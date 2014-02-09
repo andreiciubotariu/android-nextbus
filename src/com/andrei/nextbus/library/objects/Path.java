@@ -35,10 +35,4 @@ public class Path extends XmlObj{
 			mPoints.add((Point)m);
 		}
 	}
-
-	@Override
-	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
-	}
 }

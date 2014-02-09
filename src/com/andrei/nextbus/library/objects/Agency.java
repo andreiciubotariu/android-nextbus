@@ -38,9 +38,4 @@ public class Agency extends BaseInfoObj {
 	public void add(XmlObj m) {
 		//not used
 	}
-
-	@Override
-	public void setText(String text) {
-		//not used
-	}
 }

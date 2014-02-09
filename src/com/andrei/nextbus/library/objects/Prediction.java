@@ -131,10 +131,4 @@ public class Prediction extends XmlObj {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void setText(String text) {
-		// TODO Auto-generated method stub
-		
-	}
 }

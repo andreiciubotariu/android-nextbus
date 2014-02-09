@@ -55,9 +55,4 @@ public class DetailedDirection extends Direction{
 	public void add(XmlObj m) {
 		//no implementation
 	}
-
-	@Override
-	public void setText(String text) {
-		// TODO Auto-generated method stub
-	}
 }
