@@ -32,11 +32,14 @@ public class DetailedMessage extends Message {
 	}
 	
 	private static long getLong(String value){
+		if (value == null){
+			return -1L;
+		}
 		try {
 			return Long.parseLong(value);
 		}
 		catch (Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();
 			return -1L;
 		}
 	}

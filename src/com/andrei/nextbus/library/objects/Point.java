@@ -57,11 +57,14 @@ public class Point extends XmlObj{
 	}
 
 	private static double getDouble (String value){
+		if (value == null){
+			return -1L;
+		}
 		try {
 			return Double.parseDouble(value);
 		}
 		catch (Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();
 			return -1.0D;
 		}
 	}
