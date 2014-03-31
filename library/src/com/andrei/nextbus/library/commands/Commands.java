@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.andrei.nextbus.library.objects.Agency;
@@ -60,12 +62,13 @@ public class Commands {
 		XmlTagFilter wanted = new XmlTagFilter(4, "stop");
 		List<Stop> filteredStops = Parser.parse(Stop.class, xml, wanted,
 				null, filters);
+		Log.d ("STOP_FETCHING","Size of filteredStops: " + filteredStops.size());
 		List<Stop> fullFilteredStops = new ArrayList<Stop>();
-		for (int x = 0; x < allStops.size(); x++) {
-			for (int y = 0; y < filteredStops.size(); y++) {
-				if (allStops.get(x).getTag().equals(filteredStops.get(y).getTag())) {
-					fullFilteredStops.add(allStops.get(x));
-					// allStops.remove(x);
+
+		for (int x = 0; x < filteredStops.size(); x++) {
+			for (int y = 0; y < allStops.size(); y++) {
+				if (filteredStops.get(x).getTag().equals(allStops.get(y).getTag()) /*&& !TextUtils.isEmpty(allStops.get(y).getStopId())*/) {
+					fullFilteredStops.add(allStops.get(y));
 					break;
 				}
 			}

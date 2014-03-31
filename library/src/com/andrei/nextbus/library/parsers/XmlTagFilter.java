@@ -13,6 +13,8 @@ public class XmlTagFilter {
 	
 	private Class <? extends XmlObj> clazz;
 
+	private boolean fulfilled = false;
+	
 	public XmlTagFilter (int depth, String wantedTag){
 		this(depth,wantedTag,null);
 	}
@@ -49,6 +51,14 @@ public class XmlTagFilter {
 	
 	public XmlTagFilter getParent (){
 		return parent;
+	}
+	
+	public void setFulfilled (boolean fulfilled){
+		this.fulfilled = fulfilled;
+	}
+	
+	public boolean fulfilled (){
+		return fulfilled;
 	}
 	
 	public void setAttrributeSpec (String attrib,String value){

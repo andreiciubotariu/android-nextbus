@@ -128,7 +128,5 @@ public class Prediction extends XmlObj {
 
 	@Override
 	public void add(XmlObj m) {
-		// TODO Auto-generated method stub
-		
 	}
 }

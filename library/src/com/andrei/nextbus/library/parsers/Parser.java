@@ -64,6 +64,7 @@ public class Parser {
 							if (xpp.getAttributeName(x).trim().equals (f.getAttribute()) && 
 									xpp.getAttributeValue(x).trim().equals(f.getAttributeValue())){
 								currentFilterFulfilled = true;
+								f.setFulfilled(true);
 								break;
 							}
 						}
@@ -89,6 +90,7 @@ public class Parser {
 								}
 								parentList.get(parentList.size()-1).add(m);
 
+								@SuppressWarnings("unchecked")
 								List <XmlObj> currentList = (List<XmlObj>) depthListMap.get(new DepthTagPair(currentLevel.getDepth(), currentLevel.getTag()));
 								currentList.add(m);
 							}
@@ -96,8 +98,9 @@ public class Parser {
 					}
 				}
 				else if (eventType == XmlPullParser.END_TAG){
-					if (filtered && filters.get(xpp.getDepth()) != null && xpp.getName().trim().equals(filters.get(xpp.getDepth()).getTag())){
+					if (filtered && filters.get(xpp.getDepth()) != null && xpp.getName().trim().equals(filters.get(xpp.getDepth()).getTag()) && filters.get(xpp.getDepth()).fulfilled()){
 						currentFilter--;
+						filters.get(xpp.getDepth()).setFulfilled(false);
 						filterFulfilled = false;
 					}
 				}
@@ -105,6 +108,7 @@ public class Parser {
 					String text = xpp.getText();
 					XmlTagFilter currentLevel = children.get(new DepthTagPair(xpp.getDepth(), tag));
 					if (currentLevel != null){
+						@SuppressWarnings("unchecked")
 						List <XmlObj> currentList = (List<XmlObj>) depthListMap.get(new DepthTagPair(currentLevel.getDepth(), currentLevel.getTag()));
 						if (currentList.size() > 0){
 							currentList.get(currentList.size()-1).setText(text);

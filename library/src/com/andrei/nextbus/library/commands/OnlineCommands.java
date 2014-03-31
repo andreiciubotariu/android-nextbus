@@ -82,15 +82,13 @@ public class OnlineCommands extends Commands {
 //		return getStopsForDirection(Parser.getXmlAsString(url), directionTag);
 //	}
 
-	public List<Prediction> getPredictionsForStop(String agencyTag,
-			String routeTag, String stopTag) {
+	public List<Prediction> getPredictionsForStop(String agencyTag, String routeTag, String stopTag) {
 		URL url = createURL("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a="
 				+ agencyTag + "&r=" + routeTag + "&s=" + stopTag);
 		return getPredictionsForStop(Parser.getXmlAsString(url));
 	}
 
-	public List<Vehicle> getVehicles(String agencyTag, String routeTag,
-			long timeFilter) {
+	public List<Vehicle> getVehicles(String agencyTag, String routeTag, long timeFilter) {
 		if (timeFilter < 0) {
 			timeFilter = 0L;
 		}
