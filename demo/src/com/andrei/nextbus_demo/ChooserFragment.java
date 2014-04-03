@@ -4,19 +4,22 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.andrei.nextbus.library.commands.OnlineCommands;
 import com.andrei.nextbus.library.objects.BaseInfoObj;
+import com.andrei.nextbus_demo.workers.ResultListener;
+import com.andrei.nextbus_demo.workers.TaskContainerFragment;
 
 //agency -> routes -> directions -> stops -> stopFragment
 //  0         1            2          3           4
 //----------routes -> directions -> stops -> stopFragment
-public class ChooserFragment extends ListFragment{
+public class ChooserFragment extends ListFragment implements ResultListener{
 	protected static final String KEY_STEP = "step";
 	protected static final String KEY_AGENCY_TAG = "agency_tag";
 	protected static final String KEY_AGENCY_TITLE = "agency_title";
@@ -28,10 +31,10 @@ public class ChooserFragment extends ListFragment{
 	protected static final String KEY_STOP_TITLE = "stop_title";
 
 
-	private static final int AGENCIES = 0;
-	private static final int ROUTES = AGENCIES + 1;
-	private static final int DIRS = ROUTES + 1;
-	private static final int STOPS = DIRS + 1;
+	protected static final int AGENCIES = 0;
+	protected static final int ROUTES = AGENCIES + 1;
+	protected static final int DIRS = ROUTES + 1;
+	protected static final int STOPS = DIRS + 1;
 	//private static final int CHOSEN_STOP = STOPS + 1;
 
 	private List <? extends BaseInfoObj> objects;
@@ -46,9 +49,18 @@ public class ChooserFragment extends ListFragment{
 
 	public void onCreate (Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		getChildFragmentManager().beginTransaction().add(new TaskFragment(), "A").commit();
-		objects = getObjects();
-		createAdapter (objects);
+		
+		FragmentManager manager = getFragmentManager();
+		String workerTag = getTag() + TaskContainerFragment.WORKER_SUFFIX;
+		StepChooserWorker workerFrag = (StepChooserWorker) manager.findFragmentByTag(workerTag);
+		if (workerFrag == null || savedInstanceState == null){
+			workerFrag = StepChooserWorker.getInstance(getArguments());
+			manager.beginTransaction().add(workerFrag, workerTag).commit();
+		}
+		else {
+			workerFrag.start(false);
+		}
+		//getChildFragmentManager().beginTransaction().add(new TaskFragment(), "A").commit();
 		System.out.println ("created");
 	}
 
@@ -77,10 +89,10 @@ public class ChooserFragment extends ListFragment{
 	}
 
 	public <T extends BaseInfoObj> void createAdapter(List <T> list){
-		//			if (list == null){
-			//				return;
-		//			}
-		System.out.println (list.size());
+//					if (list == null){
+//							return;
+//					}
+		System.out.println ("List size is " + list.size());
 		ArrayAdapter <T> adapter = new ArrayAdapter <T> (getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, list);
 		setListAdapter(adapter);
 	}
@@ -100,24 +112,15 @@ public class ChooserFragment extends ListFragment{
 
 	}
 	
-	private List <?  extends BaseInfoObj> getObjects (){
-		OnlineCommands c = new OnlineCommands();
-		Bundle a = getArguments();
-		int step = a.getInt(KEY_STEP);
-		switch (step){
-		case AGENCIES:
-			return c.getAgencies();
-		case ROUTES:	
-			return c.getRoutes(a.getString(KEY_AGENCY_TAG));
-		case DIRS:
-			return c.getDirections(a.getString(KEY_AGENCY_TAG), a.getString(KEY_ROUTE_TAG));
-		case STOPS:
-			return c.getAllStopsForDirection(a.getString(KEY_AGENCY_TAG), a.getString(KEY_ROUTE_TAG), a.getString(KEY_DIR_TAG));
+	@Override
+	public void onResultObtained (Object result){
+		System.out.println ("Obtained result");
+		objects = (List<? extends BaseInfoObj>) result;
+		if (result == null){
+			Toast.makeText(getActivity(),"Result is null", Toast.LENGTH_SHORT).show();
 		}
-		return null;
+		createAdapter (objects);
 	}
-
-	
 	@Override
 	public void onDestroyView(){
 		

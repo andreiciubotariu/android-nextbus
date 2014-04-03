@@ -1,10 +1,14 @@
 package com.andrei.nextbus_demo;
 
+import java.util.List;
+
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
-public class StopPicker extends FragmentActivity { //implement actionbar after basic functionality
+import com.andrei.nextbus.library.objects.BaseInfoObj;
+import com.andrei.nextbus_demo.workers.AsyncActivity;
+
+public class StopPickerActivity extends AsyncActivity <List <? extends BaseInfoObj>> { //implement actionbar after basic functionality
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
