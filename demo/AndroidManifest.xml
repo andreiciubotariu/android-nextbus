@@ -25,8 +25,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.andrei.nextbus_demo.StopPickerActivity"
+            android:name="com.andrei.nextbus_demo.wizard.StopPickerActivity"
             android:label="@string/title_activity_stop_picker" >
+        </activity>
+         <activity
+            android:name="com.andrei.nextbus_demo.stop_display.StopDisplayActivity"
+            android:label="@string/title_activity_stop_display" >
         </activity>
     </application>
 

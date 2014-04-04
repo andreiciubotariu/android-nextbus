@@ -1,5 +1,7 @@
 package com.andrei.nextbus_demo;
 
+import com.andrei.nextbus_demo.wizard.StopPickerActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		startActivity(new Intent(this,StopPickerActivity.class));
+		
 	}
 
 	@Override

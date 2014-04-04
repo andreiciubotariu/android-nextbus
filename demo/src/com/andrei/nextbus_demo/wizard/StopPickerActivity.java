@@ -1,4 +1,4 @@
-package com.andrei.nextbus_demo;
+package com.andrei.nextbus_demo.wizard;
 
 import java.util.List;
 
@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import com.andrei.nextbus.library.objects.BaseInfoObj;
+import com.andrei.nextbus_demo.R;
+import com.andrei.nextbus_demo.R.id;
+import com.andrei.nextbus_demo.R.layout;
+import com.andrei.nextbus_demo.R.menu;
 import com.andrei.nextbus_demo.workers.AsyncActivity;
 
 public class StopPickerActivity extends AsyncActivity <List <? extends BaseInfoObj>> { //implement actionbar after basic functionality

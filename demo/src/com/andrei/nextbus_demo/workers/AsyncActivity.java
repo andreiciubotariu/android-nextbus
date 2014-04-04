@@ -25,7 +25,7 @@ public class AsyncActivity <T> extends FragmentActivity implements TaskCallbacks
 
 	@Override
 	public void onPostExecute(String workerTag, T result){
-		System.out.println ("delivering result to " + workerTag.split("-")[0]);
+		System.out.println ("Activity delivering result to " + workerTag.split("-")[0]);
 		FragmentManager manager = getSupportFragmentManager();
 		ResultListener l = (ResultListener) manager.findFragmentByTag(workerTag.split("-")[0]);
 		if (l != null){

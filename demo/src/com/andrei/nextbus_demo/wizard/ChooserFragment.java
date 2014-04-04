@@ -1,7 +1,8 @@
-package com.andrei.nextbus_demo;
+package com.andrei.nextbus_demo.wizard;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.andrei.nextbus.library.objects.BaseInfoObj;
+import com.andrei.nextbus_demo.R;
+import com.andrei.nextbus_demo.stop_display.StopDisplayActivity;
 import com.andrei.nextbus_demo.workers.ResultListener;
 import com.andrei.nextbus_demo.workers.TaskContainerFragment;
 
@@ -20,15 +23,15 @@ import com.andrei.nextbus_demo.workers.TaskContainerFragment;
 //  0         1            2          3           4
 //----------routes -> directions -> stops -> stopFragment
 public class ChooserFragment extends ListFragment implements ResultListener{
-	protected static final String KEY_STEP = "step";
-	protected static final String KEY_AGENCY_TAG = "agency_tag";
-	protected static final String KEY_AGENCY_TITLE = "agency_title";
-	protected static final String KEY_ROUTE_TAG = "route_tag";
-	protected static final String KEY_ROUTE_TITLE = "route_title";
-	protected static final String KEY_DIR_TAG = "dir_tag";
-	protected static final String KEY_DIR_TITLE = "dir_title";
-	protected static final String KEY_STOP_TAG = "stop_tag";
-	protected static final String KEY_STOP_TITLE = "stop_title";
+	public static final String KEY_STEP = "step";
+	public static final String KEY_AGENCY_TAG = "agency_tag";
+	public static final String KEY_AGENCY_TITLE = "agency_title";
+	public static final String KEY_ROUTE_TAG = "route_tag";
+	public static final String KEY_ROUTE_TITLE = "route_title";
+	public static final String KEY_DIR_TAG = "dir_tag";
+	public static final String KEY_DIR_TITLE = "dir_title";
+	public static final String KEY_STOP_TAG = "stop_tag";
+	public static final String KEY_STOP_TITLE = "stop_title";
 
 
 	protected static final int AGENCIES = 0;
@@ -52,13 +55,13 @@ public class ChooserFragment extends ListFragment implements ResultListener{
 		
 		FragmentManager manager = getFragmentManager();
 		String workerTag = getTag() + TaskContainerFragment.WORKER_SUFFIX;
-		StepChooserWorker workerFrag = (StepChooserWorker) manager.findFragmentByTag(workerTag);
-		if (workerFrag == null || savedInstanceState == null){
-			workerFrag = StepChooserWorker.getInstance(getArguments());
-			manager.beginTransaction().add(workerFrag, workerTag).commit();
+		StepChooserWorker workerFragment = (StepChooserWorker) manager.findFragmentByTag(workerTag);
+		if (workerFragment == null || savedInstanceState == null){
+			workerFragment = StepChooserWorker.getInstance(getArguments());
+			manager.beginTransaction().add(workerFragment, workerTag).commit();
 		}
 		else {
-			workerFrag.start(false);
+			workerFragment.start(false);
 		}
 		//getChildFragmentManager().beginTransaction().add(new TaskFragment(), "A").commit();
 		System.out.println ("created");
@@ -101,15 +104,16 @@ public class ChooserFragment extends ListFragment implements ResultListener{
 	public void onListItemClick (ListView l, View v, int position, long id){
 		addInfo (position);
 		int newStep = getArguments().getInt(KEY_STEP)+1;
-		Fragment f = null;
 		if (newStep <= STOPS){
-			f = getInstance(newStep,getArguments());
+			Fragment f = getInstance(newStep,getArguments());
+			getActivity().getSupportFragmentManager().beginTransaction().replace (R.id.content,f,String.valueOf(newStep)).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(String.valueOf(newStep)).commit();
 		}
 		else {
-			f = StopDisplayFragment.getInstance(getArguments());
+			//f = StopDisplayFragment.getInstance(getArguments());
+			Intent i = new Intent (getActivity(),StopDisplayActivity.class);
+			i.putExtras(getArguments());
+			startActivity(i);
 		}
-		getActivity().getSupportFragmentManager().beginTransaction().replace (R.id.content,f,String.valueOf(newStep)).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(String.valueOf(newStep)).commit();
-
 	}
 	
 	@Override

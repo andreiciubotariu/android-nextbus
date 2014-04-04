@@ -2,7 +2,7 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Prediction extends XmlObj {
+public class Prediction extends XmlObj implements Comparable<Prediction> {
 
 	private String mBlock, mDirTag, mTripTag, mBranch,mVehicle;
 	private long mEpochTime;
@@ -128,5 +128,15 @@ public class Prediction extends XmlObj {
 
 	@Override
 	public void add(XmlObj m) {
+	}
+
+	@Override
+	public int compareTo(Prediction other) {
+		if (this == other || this.equals(other)){
+			return 0;
+		}
+		
+		return this.mEpochTime < other.mEpochTime ? -1 : 1;
+
 	}
 }

@@ -1,4 +1,4 @@
-package com.andrei.nextbus_demo;
+package com.andrei.nextbus_demo.wizard;
 
 import java.util.List;
 
