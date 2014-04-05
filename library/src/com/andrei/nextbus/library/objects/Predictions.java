@@ -13,7 +13,7 @@ public class Predictions extends XmlObj{
 	private String stopTitle;
 	private String stopTag;
 	
-	private List <Direction> predictionList = new ArrayList <Direction>();
+	private List <Direction> directionList = new ArrayList <Direction>();
 	private List <Message> messageList = new ArrayList <Message>();
 	
 	@Override
@@ -25,12 +25,12 @@ public class Predictions extends XmlObj{
 		agencyTitle = attributes.get("stopTag");
 	}
 	
-	public void addPrediction (Direction d){
-		predictionList.add(d);
+	public void addDirection (Direction d){
+		directionList.add(d);
 	}
 	
 	public List<Direction> getDirectionsServed(){
-		return predictionList;
+		return directionList;
 	}
 	
 	public List<Message> getMessages(){
@@ -40,7 +40,7 @@ public class Predictions extends XmlObj{
 	@Override
 	public void add(XmlObj m) {
 		if (m instanceof Direction){
-			predictionList.add((Direction)m);
+			directionList.add((Direction)m);
 		}
 		else if (m instanceof Message){
 			messageList.add((Message)m);
@@ -73,9 +73,9 @@ public class Predictions extends XmlObj{
 		return stopTag;
 	}
 
-	public List<Direction> getPredictionList() {
-		return predictionList;
-	}
+//	public List<Direction> getPredictionList() {
+//		return predictionList;
+//	}
 
 	public List<Message> getMessageList() {
 		return messageList;

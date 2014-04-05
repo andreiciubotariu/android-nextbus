@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.andrei.nextbus.library.objects.Prediction;
 import com.andrei.nextbus_demo.R;
-import com.andrei.nextbus_demo.wizard.StepChooserWorker;
 import com.andrei.nextbus_demo.workers.ResultListener;
 import com.andrei.nextbus_demo.workers.TaskContainerFragment;
 
@@ -78,19 +77,21 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 		List <Prediction> predictionList = (List <Prediction>) result;
 		if (result == null || getView() == null || !isAdded()){return;}
 		TextView closestTime = (TextView) getView().findViewById(R.id.closest_time);
+		ListView nextBusTimes = (ListView) getView().findViewById(R.id.next_bus_times);
+		TextView nextBusesHeader = (TextView) getView().findViewById(R.id.next_buses_header);
 		if (!predictionList.isEmpty()){
 			closestTime.setText(predictionList.get(0).getMinutes() + " minutes");
 			//predictionList.remove(0);
 			if (predictionList.size() > 0){
 				predictionList = predictionList.subList(1, predictionList.size());
 			}
+			nextBusesHeader.setVisibility(View.VISIBLE);
+			nextBusTimes.setVisibility(View.VISIBLE);
 		}
 		ArrayAdapter <Prediction> adapter = new PredictionsAdapter(getActivity(), predictionList);
-		ListView nextBusTimes = (ListView) getView().findViewById(R.id.next_bus_times);
 		nextBusTimes.setAdapter(adapter);
 		if (predictionList.isEmpty()){
 			System.out.println ("List size is 0!");
-			TextView nextBusesHeader = (TextView) getView().findViewById(R.id.next_buses_header);
 			nextBusesHeader.setVisibility(View.INVISIBLE);
 			nextBusTimes.setVisibility(View.INVISIBLE);
 		}

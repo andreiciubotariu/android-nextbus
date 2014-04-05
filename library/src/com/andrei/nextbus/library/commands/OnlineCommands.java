@@ -87,6 +87,12 @@ public class OnlineCommands extends Commands {
 				+ agencyTag + "&r=" + routeTag + "&s=" + stopTag);
 		return getPredictionsForStop(Parser.getXmlAsString(url));
 	}
+	
+	public Predictions getPredictionsForStop(String agencyTag, String routeTag, String stopTag, boolean overload){
+		RouteStopPair r = new RouteStopPair(routeTag, stopTag);
+		List <Predictions> l = getPredictionsForMultiStops(agencyTag, r);
+		return l != null && !l.isEmpty() ? l.get(0) : null;
+	}
 
 	public List<Vehicle> getVehicles(String agencyTag, String routeTag, long timeFilter) {
 		if (timeFilter < 0) {

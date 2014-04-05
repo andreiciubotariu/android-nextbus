@@ -18,13 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Also arriving in:"
-        android:textSize="22sp" />
+        android:textSize="22sp" 
+        android:visibility="invisible"/>
 
     <ListView
         android:id="@+id/next_bus_times"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1" 
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/route_name"
