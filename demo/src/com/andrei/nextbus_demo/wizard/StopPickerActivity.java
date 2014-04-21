@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import com.andrei.nextbus.library.objects.BaseInfoObj;
+import com.andrei.nextbus.library.objects.Stop;
 import com.andrei.nextbus_demo.R;
-import com.andrei.nextbus_demo.R.id;
-import com.andrei.nextbus_demo.R.layout;
-import com.andrei.nextbus_demo.R.menu;
 import com.andrei.nextbus_demo.workers.AsyncActivity;
 
 public class StopPickerActivity extends AsyncActivity <List <? extends BaseInfoObj>> { //implement actionbar after basic functionality
@@ -17,6 +15,13 @@ public class StopPickerActivity extends AsyncActivity <List <? extends BaseInfoO
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Stop stop = getIntent().getParcelableExtra("a");
+		System.out.println ("tag: " + stop.getTag());
+		System.out.println ("title: " + stop.getTitle());
+		System.out.println ("id: " + stop.getStopId());
+		System.out.println ("point: " + stop.getLocation());
+		
+		
 		setContentView(R.layout.activity_stop_picker);
 		if (getSupportFragmentManager().findFragmentByTag(String.valueOf(0))==null){
 			ChooserFragment c = ChooserFragment.getInstance(0,new Bundle());

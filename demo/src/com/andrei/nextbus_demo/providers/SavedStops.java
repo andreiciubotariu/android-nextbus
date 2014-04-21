@@ -6,13 +6,13 @@ import android.provider.BaseColumns;
 public class SavedStops implements BaseColumns {
 	
 	public static final Uri CONTENT_URI = Uri.parse("content://" 
-			+ SavedStopProvider.AUTHORITY + "/led_contacts");
+			+ SavedStopProvider.AUTHORITY + "/saved_stops");
 
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.andrei.savedstops";
 
-	public static final String TAG = "tag";
+	public static final String TAG = "stop_tag";
 
-	public static final String TITLE = "title";
+	public static final String TITLE = "stop_title";
 
 	public static final String STOP_ID  = "stopId";
 	
@@ -28,4 +28,7 @@ public class SavedStops implements BaseColumns {
 	
 	public static final String ROUTE_TITLE = "route_title";
 	
+	public static final String DIR_TITLE = "dir_title";
+	
+	public static final String DIR_TAG = "dir_tag";
 }

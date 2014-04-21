@@ -2,6 +2,7 @@ package com.andrei.nextbus_demo.stop_display;
 
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.andrei.nextbus.library.objects.Prediction;
 import com.andrei.nextbus_demo.R;
+import com.andrei.nextbus_demo.providers.SavedStops;
+import com.andrei.nextbus_demo.wizard.ChooserFragment;
 import com.andrei.nextbus_demo.workers.ResultListener;
 import com.andrei.nextbus_demo.workers.TaskContainerFragment;
 
@@ -70,6 +73,25 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 		else {
 			workerFragment.start(false);
 		}
+		
+		Bundle b = getArguments();
+		ContentValues c = new ContentValues();
+		addToValues(c, b, ChooserFragment.KEY_AGENCY_TAG);
+		addToValues(c, b, ChooserFragment.KEY_AGENCY_TITLE);
+		addToValues(c, b, ChooserFragment.KEY_ROUTE_TAG);
+		addToValues(c, b, ChooserFragment.KEY_ROUTE_TITLE);
+		addToValues(c, b, ChooserFragment.KEY_STOP_TAG);
+		addToValues(c, b, ChooserFragment.KEY_STOP_TITLE);
+		addToValues(c, b, ChooserFragment.KEY_DIR_TAG);
+		addToValues(c, b, ChooserFragment.KEY_DIR_TITLE);
+		
+		getActivity().getContentResolver().insert(SavedStops.CONTENT_URI,c);
+		
+		System.out.println ("inserted");
+	}
+	
+	public void addToValues (ContentValues c, Bundle b, String key){
+		c.put(key, b.getString(key));
 	}
 	
 	@Override

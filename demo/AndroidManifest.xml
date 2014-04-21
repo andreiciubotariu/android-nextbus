@@ -32,6 +32,13 @@
             android:name="com.andrei.nextbus_demo.stop_display.StopDisplayActivity"
             android:label="@string/title_activity_stop_display" >
         </activity>
+        
+         
+         <provider
+            android:name="com.andrei.nextbus_demo.providers.SavedStopProvider"
+            android:authorities="com.andrei.nextbus_demo.providers.SavedStopProvider"
+            android:exported="false" >
+        </provider>
     </application>
 
 </manifest>

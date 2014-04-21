@@ -2,6 +2,8 @@ package com.andrei.nextbus_demo.providers;
 
 import java.util.HashMap;
 
+import com.andrei.nextbus_demo.wizard.ChooserFragment;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -25,7 +27,7 @@ public class SavedStopProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.andrei.nextbus_demo.providers.SavedStopProvider";
 	private static final UriMatcher sUriMatcher;
 
-	private static final int SavedStop = 1;
+	private static final int SavedStop = 1; //make it clear it is a constant.
 	private static final int SavedStops_ID = 2;
 
 	private static HashMap <String, String> SavedStopsProjectionMap;
@@ -50,6 +52,8 @@ public class SavedStopProvider extends ContentProvider {
 					+ SavedStops.AGENCY_TITLE + " TEXT, "
 					+ SavedStops.ROUTE_TAG + " TEXT, "
 					+ SavedStops.ROUTE_TITLE + " TEXT, "
+					+ SavedStops.DIR_TITLE + " TEXT,"
+					+ SavedStops.DIR_TAG + " TEXT"
 					+ ")";
 			db.execSQL(CREATE_PROFILES_TABLE);
 		}
@@ -107,7 +111,15 @@ public class SavedStopProvider extends ContentProvider {
 		}
 
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		Cursor query = this.query(uri, new String []{SavedStops._ID}, SavedStops.TAG + " =?", new String[]{values.get(ChooserFragment.KEY_STOP_TAG).toString()}, null);
+		if (query != null){
+			if (query.moveToFirst()){
+				values.put(SavedStops._ID, query.getString(0));
+			}
+			query.close();
+		}
 		long rowId = db.insertWithOnConflict(SavedStops_TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+		Log.d("Database","rowId of stop is: " + rowId);
 		if (rowId > 0) {
 			Uri contactUri = ContentUris.withAppendedId(SavedStops.CONTENT_URI, rowId);
 			getContext().getContentResolver().notifyChange(contactUri, null);
@@ -142,7 +154,7 @@ public class SavedStopProvider extends ContentProvider {
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 		Cursor savedStopCursor = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 		savedStopCursor.setNotificationUri(getContext().getContentResolver(), uri);
-		return null;
+		return savedStopCursor;
 	}
 
 	@Override
@@ -177,8 +189,11 @@ public class SavedStopProvider extends ContentProvider {
 		SavedStopsProjectionMap.put(SavedStops.STOP_ID, SavedStops.STOP_ID);
 		SavedStopsProjectionMap.put(SavedStops.LAT, SavedStops.LAT);
 		SavedStopsProjectionMap.put(SavedStops.LON, SavedStops.LON);
-		SavedStopsProjectionMap.put(SavedStops.AGENCY_TAG, SavedStops.AGENCY_TITLE);
+		SavedStopsProjectionMap.put(SavedStops.AGENCY_TAG, SavedStops.AGENCY_TAG);
+		SavedStopsProjectionMap.put(SavedStops.AGENCY_TITLE, SavedStops.AGENCY_TITLE);
 		SavedStopsProjectionMap.put(SavedStops.ROUTE_TAG, SavedStops.ROUTE_TAG);
 		SavedStopsProjectionMap.put(SavedStops.ROUTE_TITLE, SavedStops.ROUTE_TITLE);
+		SavedStopsProjectionMap.put(SavedStops.DIR_TITLE, SavedStops.DIR_TITLE);
+		SavedStopsProjectionMap.put(SavedStops.DIR_TAG, SavedStops.DIR_TAG);
 	}
 }

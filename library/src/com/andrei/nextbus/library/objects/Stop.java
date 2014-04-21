@@ -2,7 +2,10 @@ package com.andrei.nextbus.library.objects;
 
 import java.util.Map;
 
-public class Stop extends BaseInfoObj {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Stop extends BaseInfoObj implements Parcelable{
 
 	private String mTag, mTitle, mStopId;
 	private Point mStopLocation;
@@ -56,6 +59,39 @@ public class Stop extends BaseInfoObj {
 	@Override
 	public void add(XmlObj m) {
 		// TODO Auto-generated method stub
-		
 	}
+
+	//parcelable portion
+	private Stop (Parcel in){
+		mTag = in.readString();
+		mTitle = in.readString();
+		mStopId = in.readString();
+		mStopLocation = (Point) in.readValue(getClass().getClassLoader());
+	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(mTag);
+		out.writeString(mTitle);
+		out.writeString(mStopId);
+		out.writeValue(mStopLocation);
+	}
+	
+	public static final Parcelable.Creator<Stop> CREATOR = new Parcelable.Creator<Stop>() {
+
+		@Override
+		public Stop createFromParcel(Parcel source) {
+			return new Stop (source);
+		}
+
+		@Override
+		public Stop[] newArray(int size) {
+			return new Stop [size];
+		}
+	};
 }

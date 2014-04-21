@@ -125,6 +125,7 @@ public class ChooserFragment extends ListFragment implements ResultListener{
 		}
 		createAdapter (objects);
 	}
+	
 	@Override
 	public void onDestroyView(){
 		
