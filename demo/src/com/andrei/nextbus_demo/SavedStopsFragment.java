@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract.CommonDataKinds;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -28,10 +27,6 @@ public class SavedStopsFragment extends ListFragment implements LoaderManager.Lo
 
 	private final static String[] FROM_COLUMNS = {
 		SavedStops.TITLE, SavedStops.ROUTE_TITLE, SavedStops.DIR_TITLE, SavedStops.AGENCY_TITLE, 
-		/*SavedStops._ID,
-		SavedStops.TAG,
-		SavedStops.ROUTE_TAG, 
-		SavedStops.AGENCY_TAG*/
 	};
 
 	private static final String[] PROJECTION = {
@@ -51,7 +46,7 @@ public class SavedStopsFragment extends ListFragment implements LoaderManager.Lo
 	 * that get the Cursor column contents.
 	 */
 	private final static int[] TO_IDS = {
-		R.id.stop_name, R.id.route_tag,R.id.dir_name, R.id.agency_name
+		R.id.stop_name, R.id.route_title,R.id.dir_name, R.id.agency_name
 		/*, R.id.agency_name,R.id.agency_name, R.id.agency_name*/
 	};
 
@@ -70,31 +65,6 @@ public class SavedStopsFragment extends ListFragment implements LoaderManager.Lo
 				FROM_COLUMNS, 
 				TO_IDS,
 				0);
-//		mCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-//			@Override
-//			public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-//				switch (view.getId()){
-//				case R.id.contact_display_color:
-//					LedContactInfo info = mLedData.get(cursor.getString(cursor.getColumnIndex(Contacts.LOOKUP_KEY)));
-//					int color = info == null ? Color.GRAY : info.color;
-//					view.setBackgroundColor(color);
-//					cursor.getC
-//					return true;
-//
-//				case R.id.contact_vibrate:
-//					info = mLedData.get(cursor.getString(cursor.getColumnIndex(Contacts.LOOKUP_KEY)));
-//					if (info != null && !TextUtils.isEmpty(info.vibratePattern)){
-//						view.setVisibility(View.VISIBLE);
-//						view.setBackgroundResource(R.drawable.ic_contact_vibrate);
-//					}
-//					else {
-//						view.setVisibility(View.GONE);
-//					}
-//				return true;
-//				}
-//				return false;
-//			}
-//		});
 		// Sets the adapter for the ListView
 		setListAdapter(mCursorAdapter);
 
@@ -143,7 +113,7 @@ public class SavedStopsFragment extends ListFragment implements LoaderManager.Lo
 				PROJECTION,
 				null,//selection
 				null,//selectionargs
-				/*SavedStops.TITLE + ", " + SavedStops.ROUTE_TITLE+ ", " + SavedStops.ROUTE_TITLE+ ", " + SavedStops.DIR_TITLE+ ", " + SavedStops.AGENCY_TITLE + " ASC"*/null);
+				SavedStops.AGENCY_TITLE + " ASC," + SavedStops.ROUTE_TITLE + " ASC," + SavedStops.DIR_TITLE + " ASC," + SavedStops.TITLE + " ASC");
 	}
 
 	@Override

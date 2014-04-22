@@ -6,5 +6,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_stop_picker">Stop Picker</string>
     <string name="title_activity_stop_display">Stop Display</string>
+    <string name="action_choose_stop">Choose Stop</string>
 
 </resources>

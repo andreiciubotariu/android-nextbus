@@ -7,21 +7,25 @@
     <TextView
         android:id="@+id/stop_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/route_tag"
+        android:id="@+id/route_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/dir_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" 
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <TextView
         android:id="@+id/agency_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" 
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 </LinearLayout>
