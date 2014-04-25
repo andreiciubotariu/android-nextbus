@@ -28,11 +28,13 @@ import com.andrei.nextbus_demo.workers.TaskContainerFragment;
 public class PredictionDisplayFragment extends Fragment implements ResultListener{
 
 	private static final String UPDATED_TIME = "Updated at: ";
+	private static final String KEY_TIME_STORED = "worker_time_fetched";
 	private static final int RED = Color.parseColor("#FF1800");
 	private static final int BLUE = Color.parseColor ("#1240AB");
 	private static final int YELLOW = Color.parseColor ("#E2FA00");
 	private static final int GREEN = Color.parseColor ("#00C12B");
 	
+	private long mTimeStored = -1L;
 	
 	public static PredictionDisplayFragment getInstance (Bundle args){
 		PredictionDisplayFragment f = new PredictionDisplayFragment();
@@ -88,9 +90,24 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 			manager.beginTransaction().add(workerFragment, workerTag).commit();
 		}
 		else {
-			workerFragment.start(false);
+			mTimeStored = savedInstanceState.getLong(KEY_TIME_STORED,System.currentTimeMillis()-10000);
+			refreshIfPossible(workerFragment);
+			//workerFragment.start(forceRefresh);
 		}
 
+	}
+	
+	private void refreshIfPossible (PredictionFetcher f){
+		boolean canRefresh = System.currentTimeMillis() - mTimeStored > 10000;
+		if (f != null){
+			f.start(canRefresh);
+		}
+	}
+	
+	@Override
+    	public void onSaveInstanceState(Bundle outState) {
+        	super.onSaveInstanceState(outState);
+        	outState.putLong(KEY_TIME_STORED, mTimeStored);
 	}
 
 	@Override
@@ -103,6 +120,9 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 		switch (item.getItemId()){
 		case R.id.action_save_stop:
 			saveStopToDB();
+		case R.id.action_refresh:
+		        PredictionFetcher workerFragment = (PredictionFetcher) manager.findFragmentByTag(getTag() + TaskContainerFragment.WORKER_SUFFIX);
+			refreshIfPossible (workerFragment);
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -157,9 +177,9 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 			
 			TaskContainerFragment w = (TaskContainerFragment) getFragmentManager().findFragmentByTag(this.getTag() + TaskContainerFragment.WORKER_SUFFIX);
 			if (w != null){
-				long timeStored = w.getTimeStored();
+				mTimeStored = w.getTimeStored();
 				Time time = new Time();
-				time.set(timeStored);
+				time.set(mTimeStored);
 				fetchedTimeView.setText(UPDATED_TIME + time.format("%k:%M"));
 				
 			}
