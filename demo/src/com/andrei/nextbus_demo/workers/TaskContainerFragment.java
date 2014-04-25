@@ -13,6 +13,8 @@ import android.support.v4.app.Fragment;
 public abstract class TaskContainerFragment <T> extends Fragment implements Startable{
 
 	public static final String WORKER_SUFFIX = "-worker";
+	
+	private static long mTimeStored = -1L;
   /**
    * Callback interface through which the fragment will report the
    * task's progress and results back to the Activity.
@@ -82,8 +84,13 @@ public abstract class TaskContainerFragment <T> extends Fragment implements Star
 	  return mResult;
   }
   
+  public long getTimeStored(){
+	return mTimeStored;
+  }
+  
   public void storeResult (T result){
-	  System.out.println ("Storing result");
+	 System.out.println ("Storing result");
+	 mTimeStored = System.currentTimeMillis();
 	 mResult = result;
   }
   
@@ -98,6 +105,12 @@ public abstract class TaskContainerFragment <T> extends Fragment implements Star
 	  }
 	  else {
 		  System.out.println("Could not deliver result. Callback or result null");
+		  if (mResult != null){
+			  System.out.println ("Result is: " + mResult.toString());
+		  }
+		  else {
+			  System.out.println ("Result is null");
+		  }
 	  }
   }
 

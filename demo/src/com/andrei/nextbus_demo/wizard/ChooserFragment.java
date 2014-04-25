@@ -21,7 +21,7 @@ import com.andrei.nextbus_demo.workers.TaskContainerFragment;
 
 //agency -> routes -> directions -> stops -> stopFragment
 //  0         1            2          3           4
-//----------routes -> directions -> stops -> stopFragment
+//-skipped--routes -> directions -> stops -> stopFragment
 public class ChooserFragment extends ListFragment implements ResultListener{
 	public static final String KEY_STEP = "step";
 	public static final String KEY_AGENCY_TAG = "agency_tag";
