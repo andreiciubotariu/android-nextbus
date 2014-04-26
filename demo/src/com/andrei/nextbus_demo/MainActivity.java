@@ -1,22 +1,22 @@
 package com.andrei.nextbus_demo;
 
-import com.andrei.nextbus_demo.wizard.StopPickerActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends FragmentActivity {
+import com.andrei.nextbus_demo.wizard.StopPickerActivity;
+
+public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_fragment_simple);
 		
 		if (getSupportFragmentManager().findFragmentByTag("main") == null){
-			getSupportFragmentManager().beginTransaction().replace(R.id.content, new SavedStopsFragment(),"main").commit();
+			getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SavedStopsFragment(),"main").commit();
 		}
 	}
 

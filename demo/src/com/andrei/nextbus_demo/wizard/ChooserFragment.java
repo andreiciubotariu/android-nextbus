@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.andrei.nextbus.library.objects.BaseInfoObj;
 import com.andrei.nextbus_demo.R;
+import com.andrei.nextbus_demo.providers.SavedStops;
 import com.andrei.nextbus_demo.stop_display.StopDisplayActivity;
 import com.andrei.nextbus_demo.workers.ResultListener;
 import com.andrei.nextbus_demo.workers.TaskContainerFragment;
@@ -50,6 +53,7 @@ public class ChooserFragment extends ListFragment implements ResultListener{
 		return c;
 	}
 
+	@Override
 	public void onCreate (Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -63,8 +67,33 @@ public class ChooserFragment extends ListFragment implements ResultListener{
 		else {
 			workerFragment.start(false);
 		}
-		//getChildFragmentManager().beginTransaction().add(new TaskFragment(), "A").commit();
-		System.out.println ("created");
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		setActivityTitle();
+	}
+	
+	private void setActivityTitle(){
+		int step = getArguments().getInt(KEY_STEP);
+		ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+		String title = "NextBus-Demo";
+			switch (step){
+			case AGENCIES:
+				title = "Agencies";
+				break;
+			case ROUTES:
+				title = getArguments().getString(SavedStops.AGENCY_TITLE);
+				break;
+			case DIRS:
+				title = getArguments().getString(SavedStops.ROUTE_TITLE);
+				break;
+			case STOPS:
+				title = getArguments().getString(SavedStops.DIR_TITLE);
+				break;
+		}
+			actionBar.setTitle (title);
 	}
 
 	private static void addToBundle(Bundle b, BaseInfoObj o,String tag, String title){
@@ -106,7 +135,7 @@ public class ChooserFragment extends ListFragment implements ResultListener{
 		int newStep = getArguments().getInt(KEY_STEP)+1;
 		if (newStep <= STOPS){
 			Fragment f = getInstance(newStep,getArguments());
-			getActivity().getSupportFragmentManager().beginTransaction().replace (R.id.content,f,String.valueOf(newStep)).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(String.valueOf(newStep)).commit();
+			getActivity().getSupportFragmentManager().beginTransaction().replace (R.id.content_frame,f,String.valueOf(newStep)).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(String.valueOf(newStep)).commit();
 		}
 		else {
 			//f = StopDisplayFragment.getInstance(getArguments());
@@ -124,12 +153,5 @@ public class ChooserFragment extends ListFragment implements ResultListener{
 			Toast.makeText(getActivity(),"Result is null", Toast.LENGTH_SHORT).show();
 		}
 		createAdapter (objects);
-	}
-	
-	@Override
-	public void onDestroyView(){
-		
-		System.out.println ("destroying view");
-		super.onDestroyView();
 	}
 }

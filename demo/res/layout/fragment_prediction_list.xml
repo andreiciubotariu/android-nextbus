@@ -13,6 +13,8 @@
         android:minHeight="48dp"
         android:textSize="24sp" />
 
+    <View
+        style = "@style/Divider"></View>
     <TextView
         android:id="@+id/next_buses_header"
         android:layout_width="match_parent"

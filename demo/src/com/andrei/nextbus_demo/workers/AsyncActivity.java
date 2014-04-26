@@ -1,11 +1,11 @@
 package com.andrei.nextbus_demo.workers;
 
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
 
 import com.andrei.nextbus_demo.workers.TaskContainerFragment.TaskCallbacks;
 
-public class AsyncActivity <T> extends FragmentActivity implements TaskCallbacks <T>{
+public class AsyncActivity <T> extends ActionBarActivity implements TaskCallbacks <T>{
 
 
 	@Override

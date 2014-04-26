@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
 import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,7 +40,6 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 	public static PredictionDisplayFragment getInstance (Bundle args){
 		PredictionDisplayFragment f = new PredictionDisplayFragment();
 		f.setArguments(args);
-		f.setHasOptionsMenu(true);
 		return f;
 	}
 
@@ -66,6 +66,12 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 			return v;
 		}
 	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
 
 	@Override
 	public View onCreateView (LayoutInflater inflater, ViewGroup root, Bundle savedInstanceState){
@@ -73,15 +79,19 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 		//requestTransparentRegion is needed since gingerbread does NOT refresh the view until only after the activity is recreated
 		root.requestTransparentRegion(v);
 
-		TextView dirTitle = (TextView) v.findViewById(R.id.dir_title);
-		if (getArguments().containsKey(SavedStops.DIR_TITLE)){
-			dirTitle.setText(getArguments().getString(SavedStops.DIR_TITLE));
-		}
 		return v;
 	}
 
 	@Override
 	public void onViewCreated (View v, Bundle savedInstanceState){
+		TextView dirTitle = (TextView) v.findViewById(R.id.dir_title);
+		if (getArguments().containsKey(SavedStops.DIR_TITLE)){
+			dirTitle.setText(getArguments().getString(SavedStops.DIR_TITLE));
+		}
+		if (getArguments().containsKey(SavedStops.TITLE)){
+			((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString(SavedStops.TITLE));
+		}
+		
 		FragmentManager manager = getFragmentManager();
 		String workerTag = getTag() + TaskContainerFragment.WORKER_SUFFIX;
 		PredictionFetcher workerFragment = (PredictionFetcher) manager.findFragmentByTag(workerTag);
@@ -92,7 +102,6 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 		else {
 			mTimeStored = savedInstanceState.getLong(KEY_TIME_STORED,System.currentTimeMillis()-10000);
 			refreshIfPossible(workerFragment);
-			//workerFragment.start(forceRefresh);
 		}
 
 	}
@@ -120,9 +129,11 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 		switch (item.getItemId()){
 		case R.id.action_save_stop:
 			saveStopToDB();
+			return true;
 		case R.id.action_refresh:
-		        PredictionFetcher workerFragment = (PredictionFetcher) manager.findFragmentByTag(getTag() + TaskContainerFragment.WORKER_SUFFIX);
+		        PredictionFetcher workerFragment = (PredictionFetcher) getFragmentManager().findFragmentByTag(getTag() + TaskContainerFragment.WORKER_SUFFIX);
 			refreshIfPossible (workerFragment);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -175,7 +186,7 @@ public class PredictionDisplayFragment extends Fragment implements ResultListene
 			nextBusesHeader.setVisibility(View.VISIBLE);
 			nextBusTimes.setVisibility(View.VISIBLE);
 			
-			TaskContainerFragment w = (TaskContainerFragment) getFragmentManager().findFragmentByTag(this.getTag() + TaskContainerFragment.WORKER_SUFFIX);
+			PredictionFetcher w = (PredictionFetcher) getFragmentManager().findFragmentByTag(this.getTag() + PredictionFetcher.WORKER_SUFFIX);
 			if (w != null){
 				mTimeStored = w.getTimeStored();
 				Time time = new Time();

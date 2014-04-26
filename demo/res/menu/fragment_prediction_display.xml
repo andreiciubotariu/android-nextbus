@@ -6,5 +6,11 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="@string/action_save_stop"/>
+    
+     <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="200"
+        android:showAsAction="always"
+        android:title="@string/action_refresh"/>
 
 </menu>

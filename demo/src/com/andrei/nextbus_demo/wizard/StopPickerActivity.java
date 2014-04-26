@@ -18,7 +18,7 @@ public class StopPickerActivity extends AsyncActivity <List <? extends BaseInfoO
 		setContentView(R.layout.activity_stop_picker);
 		if (getSupportFragmentManager().findFragmentByTag(String.valueOf(0))==null){
 			ChooserFragment c = ChooserFragment.getInstance(0,new Bundle());
-			getSupportFragmentManager().beginTransaction().replace (R.id.content,c,String.valueOf(0)).commit();
+			getSupportFragmentManager().beginTransaction().replace (R.id.content_frame,c,String.valueOf(0)).commit();
 		}
 	}
 
