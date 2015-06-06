@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_save_stop"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/action_save_stop"/>
+    
+     <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="200"
+        android:showAsAction="always"
+        android:title="@string/action_refresh"/>
+
+</menu>
