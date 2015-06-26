@@ -1,0 +1,451 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Manifest Merging:
+-----------------
+Your project uses libraries that provide manifests, and your Eclipse
+project did not explicitly turn on manifest merging. In Android Gradle
+projects, manifests are always merged (meaning that contents from your
+libraries' manifests will be merged into the app manifest. If you had
+manually copied contents from library manifests into your app manifest
+you may need to remove these for the app to build correctly.
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+From nextbus-demo:
+* .gitignore
+* .idea\
+* .idea\.name
+* .idea\compiler.xml
+* .idea\copyright\
+* .idea\copyright\profiles_settings.xml
+* .idea\misc.xml
+* .idea\modules.xml
+* .idea\vcs.xml
+* .idea\workspace.xml
+* build.gradle
+* gradle\
+* gradle\wrapper\
+* gradle\wrapper\gradle-wrapper.jar
+* gradle\wrapper\gradle-wrapper.properties
+* gradlew
+* gradlew.bat
+* ic_launcher-web.png
+* nextbusdemo\
+* nextbusdemo\build.gradle
+* nextbusdemo\lint.xml
+* nextbusdemo\src\
+* nextbusdemo\src\main\
+* nextbusdemo\src\main\AndroidManifest.xml
+* nextbusdemo\src\main\java\
+* nextbusdemo\src\main\java\com\
+* nextbusdemo\src\main\java\com\andrei\
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\MainActivity.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\SavedStopsFragment.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\TaskFragment.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\providers\
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\providers\SavedStopProvider.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\providers\SavedStops.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\stop_display\
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\stop_display\PredictionDisplayFragment.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\stop_display\PredictionFetcher.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\stop_display\StopDisplayActivity.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\wizard\
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\wizard\ChooserFragment.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\wizard\StepChooserWorker.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\wizard\StopPickerActivity.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\workers\
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\workers\AsyncActivity.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\workers\ResultListener.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\workers\Startable.java
+* nextbusdemo\src\main\java\com\andrei\nextbus_demo\workers\TaskContainerFragment.java
+* nextbusdemo\src\main\res\
+* nextbusdemo\src\main\res\drawable-hdpi\
+* nextbusdemo\src\main\res\drawable-hdpi\ic_launcher.png
+* nextbusdemo\src\main\res\drawable-mdpi\
+* nextbusdemo\src\main\res\drawable-mdpi\ic_launcher.png
+* nextbusdemo\src\main\res\drawable-xhdpi\
+* nextbusdemo\src\main\res\drawable-xhdpi\ic_launcher.png
+* nextbusdemo\src\main\res\drawable-xxhdpi\
+* nextbusdemo\src\main\res\drawable-xxhdpi\ic_launcher.png
+* nextbusdemo\src\main\res\layout\
+* nextbusdemo\src\main\res\layout\activity_fragment_simple.xml
+* nextbusdemo\src\main\res\layout\activity_stop_picker.xml
+* nextbusdemo\src\main\res\layout\fav_stop_listitem.xml
+* nextbusdemo\src\main\res\layout\fragment_prediction_list.xml
+* nextbusdemo\src\main\res\menu\
+* nextbusdemo\src\main\res\menu\fragment_prediction_display.xml
+* nextbusdemo\src\main\res\menu\main.xml
+* nextbusdemo\src\main\res\menu\stop_picker.xml
+* nextbusdemo\src\main\res\values-sw600dp\
+* nextbusdemo\src\main\res\values-sw600dp\dimens.xml
+* nextbusdemo\src\main\res\values-sw720dp-land\
+* nextbusdemo\src\main\res\values-sw720dp-land\dimens.xml
+* nextbusdemo\src\main\res\values-v11\
+* nextbusdemo\src\main\res\values-v11\styles.xml
+* nextbusdemo\src\main\res\values-v14\
+* nextbusdemo\src\main\res\values-v14\styles.xml
+* nextbusdemo\src\main\res\values\
+* nextbusdemo\src\main\res\values\dimens.xml
+* nextbusdemo\src\main\res\values\strings.xml
+* nextbusdemo\src\main\res\values\styles.xml
+* nextbuslibrary\
+* nextbuslibrary\build.gradle
+* nextbuslibrary\libs\
+* nextbuslibrary\libs\commons-io-2.4.jar
+* nextbuslibrary\src\
+* nextbuslibrary\src\main\
+* nextbuslibrary\src\main\AndroidManifest.xml
+* nextbuslibrary\src\main\java\
+* nextbuslibrary\src\main\java\com\
+* nextbuslibrary\src\main\java\com\andrei\
+* nextbuslibrary\src\main\java\com\andrei\nextbus\
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\commands\
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\commands\Commands.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\commands\OnlineCommands.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Agency.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\BaseInfoObj.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\BaseInformationProvider.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\DetailedDirection.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Direction.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Path.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Point.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Prediction.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Predictions.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Route.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\RouteSchedule.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\ScheduledStop.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Stop.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\TimePair.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\Vehicle.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\XmlObj.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\messages\
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\messages\DetailedMessage.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\messages\Message.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\messages\RouteConfiguredForMessage.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\messages\Text.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\messages\TextPhoneme.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\objects\messages\TextSecondaryLang.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\parsers\
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\parsers\DepthTagPair.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\parsers\Parser.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\parsers\RouteStopPair.java
+* nextbuslibrary\src\main\java\com\andrei\nextbus\library\parsers\XmlTagFilter.java
+* nextbuslibrary\src\main\res\
+* nextbuslibrary\src\main\res\drawable-hdpi\
+* nextbuslibrary\src\main\res\drawable-hdpi\ic_launcher.png
+* nextbuslibrary\src\main\res\drawable-mdpi\
+* nextbuslibrary\src\main\res\drawable-mdpi\ic_launcher.png
+* nextbuslibrary\src\main\res\drawable-xhdpi\
+* nextbuslibrary\src\main\res\drawable-xhdpi\ic_launcher.png
+* nextbuslibrary\src\main\res\values-v11\
+* nextbuslibrary\src\main\res\values-v11\styles.xml
+* nextbuslibrary\src\main\res\values-v14\
+* nextbuslibrary\src\main\res\values-v14\styles.xml
+* nextbuslibrary\src\main\res\values\
+* nextbuslibrary\src\main\res\values\strings.xml
+* nextbuslibrary\src\main\res\values\styles.xml
+* proguard-project.txt
+* settings.gradle
+From nextbus-library:
+* .gitignore
+* .gradle\
+* .gradle\2.2.1\
+* .gradle\2.2.1\taskArtifacts\
+* .gradle\2.2.1\taskArtifacts\cache.properties
+* .gradle\2.2.1\taskArtifacts\cache.properties.lock
+* .gradle\2.2.1\taskArtifacts\fileHashes.bin
+* .gradle\2.2.1\taskArtifacts\fileSnapshots.bin
+* .gradle\2.2.1\taskArtifacts\outputFileStates.bin
+* .gradle\2.2.1\taskArtifacts\taskArtifacts.bin
+* .idea\
+* .idea\.name
+* .idea\compiler.xml
+* .idea\copyright\
+* .idea\copyright\profiles_settings.xml
+* .idea\gradle.xml
+* .idea\libraries\
+* .idea\libraries\commons_io_2_4.xml
+* .idea\libraries\support_v4_18_0_0.xml
+* .idea\misc.xml
+* .idea\modules.xml
+* .idea\vcs.xml
+* .idea\workspace.xml
+* LICENSE
+* README.md
+* app\
+* app\app.iml
+* app\build.gradle
+* app\build\
+* app\build\generated\
+* app\build\generated\source\
+* app\build\generated\source\buildConfig\
+* app\build\generated\source\buildConfig\androidTest\
+* app\build\generated\source\buildConfig\androidTest\debug\
+* app\build\generated\source\buildConfig\androidTest\debug\com\
+* app\build\generated\source\buildConfig\androidTest\debug\com\andrei\
+* app\build\generated\source\buildConfig\androidTest\debug\com\andrei\nextbusbridge\
+* app\build\generated\source\buildConfig\androidTest\debug\com\andrei\nextbusbridge\test\
+* app\build\generated\source\buildConfig\androidTest\debug\com\andrei\nextbusbridge\test\BuildConfig.java
+* app\build\generated\source\buildConfig\debug\
+* app\build\generated\source\buildConfig\debug\com\
+* app\build\generated\source\buildConfig\debug\com\andrei\
+* app\build\generated\source\buildConfig\debug\com\andrei\nextbusbridge\
+* app\build\generated\source\buildConfig\debug\com\andrei\nextbusbridge\BuildConfig.java
+* app\build\generated\source\r\
+* app\build\generated\source\r\androidTest\
+* app\build\generated\source\r\androidTest\debug\
+* app\build\generated\source\r\androidTest\debug\com\
+* app\build\generated\source\r\androidTest\debug\com\andrei\
+* app\build\generated\source\r\androidTest\debug\com\andrei\nextbusbridge\
+* app\build\generated\source\r\androidTest\debug\com\andrei\nextbusbridge\R.java
+* app\build\generated\source\r\androidTest\debug\com\andrei\nextbusbridge\test\
+* app\build\generated\source\r\androidTest\debug\com\andrei\nextbusbridge\test\R.java
+* app\build\generated\source\r\debug\
+* app\build\generated\source\r\debug\com\
+* app\build\generated\source\r\debug\com\andrei\
+* app\build\generated\source\r\debug\com\andrei\nextbusbridge\
+* app\build\generated\source\r\debug\com\andrei\nextbusbridge\R.java
+* app\build\intermediates\
+* app\build\intermediates\bundles\
+* app\build\intermediates\bundles\debug\
+* app\build\intermediates\bundles\debug\AndroidManifest.xml
+* app\build\intermediates\bundles\debug\R.txt
+* app\build\intermediates\bundles\debug\aapt\
+* app\build\intermediates\bundles\debug\aapt\AndroidManifest.xml
+* app\build\intermediates\bundles\debug\classes.jar
+* app\build\intermediates\bundles\debug\libs\
+* app\build\intermediates\bundles\debug\libs\commons-io-2.4.jar
+* app\build\intermediates\bundles\debug\res\
+* app\build\intermediates\bundles\debug\res\drawable-hdpi\
+* app\build\intermediates\bundles\debug\res\drawable-hdpi\ic_launcher.png
+* app\build\intermediates\bundles\debug\res\drawable-mdpi\
+* app\build\intermediates\bundles\debug\res\drawable-mdpi\ic_launcher.png
+* app\build\intermediates\bundles\debug\res\drawable-xhdpi\
+* app\build\intermediates\bundles\debug\res\drawable-xhdpi\ic_launcher.png
+* app\build\intermediates\bundles\debug\res\values-v11\
+* app\build\intermediates\bundles\debug\res\values-v11\values-v11.xml
+* app\build\intermediates\bundles\debug\res\values-v14\
+* app\build\intermediates\bundles\debug\res\values-v14\values-v14.xml
+* app\build\intermediates\bundles\debug\res\values\
+* app\build\intermediates\bundles\debug\res\values\values.xml
+* app\build\intermediates\classes\
+* app\build\intermediates\classes\debug\
+* app\build\intermediates\classes\debug\com\
+* app\build\intermediates\classes\debug\com\andrei\
+* app\build\intermediates\classes\debug\com\andrei\nextbus\
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\commands\
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\commands\Commands.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\commands\OnlineCommands.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Agency.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\BaseInfoObj.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\BaseInformationProvider.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\DetailedDirection.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Direction.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Path.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Point$1.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Point.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Prediction.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Predictions.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Route.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\RouteSchedule.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\ScheduledStop.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Stop$1.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Stop.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\TimePair.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\Vehicle.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\XmlObj.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\messages\
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\messages\DetailedMessage.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\messages\Message.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\messages\RouteConfiguredForMessage.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\messages\Text.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\messages\TextPhoneme.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\objects\messages\TextSecondaryLang.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\parsers\
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\parsers\DepthTagPair.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\parsers\Parser.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\parsers\RouteStopPair.class
+* app\build\intermediates\classes\debug\com\andrei\nextbus\library\parsers\XmlTagFilter.class
+* app\build\intermediates\classes\debug\com\andrei\nextbusbridge\
+* app\build\intermediates\classes\debug\com\andrei\nextbusbridge\BuildConfig.class
+* app\build\intermediates\classes\debug\com\andrei\nextbusbridge\R$attr.class
+* app\build\intermediates\classes\debug\com\andrei\nextbusbridge\R$drawable.class
+* app\build\intermediates\classes\debug\com\andrei\nextbusbridge\R$string.class
+* app\build\intermediates\classes\debug\com\andrei\nextbusbridge\R$style.class
+* app\build\intermediates\classes\debug\com\andrei\nextbusbridge\R.class
+* app\build\intermediates\incremental\
+* app\build\intermediates\incremental\aidl\
+* app\build\intermediates\incremental\aidl\androidTest\
+* app\build\intermediates\incremental\aidl\androidTest\debug\
+* app\build\intermediates\incremental\aidl\androidTest\debug\dependency.store
+* app\build\intermediates\incremental\aidl\debug\
+* app\build\intermediates\incremental\aidl\debug\dependency.store
+* app\build\intermediates\incremental\mergeAssets\
+* app\build\intermediates\incremental\mergeAssets\androidTest\
+* app\build\intermediates\incremental\mergeAssets\androidTest\debug\
+* app\build\intermediates\incremental\mergeAssets\androidTest\debug\merger.xml
+* app\build\intermediates\incremental\mergeAssets\debug\
+* app\build\intermediates\incremental\mergeAssets\debug\merger.xml
+* app\build\intermediates\incremental\mergeResources\
+* app\build\intermediates\incremental\mergeResources\androidTest\
+* app\build\intermediates\incremental\mergeResources\androidTest\debug\
+* app\build\intermediates\incremental\mergeResources\androidTest\debug\merger.xml
+* app\build\intermediates\incremental\packageResources\
+* app\build\intermediates\incremental\packageResources\debug\
+* app\build\intermediates\incremental\packageResources\debug\merger.xml
+* app\build\intermediates\manifests\
+* app\build\intermediates\manifests\androidTest\
+* app\build\intermediates\manifests\androidTest\debug\
+* app\build\intermediates\manifests\androidTest\debug\AndroidManifest.xml
+* app\build\intermediates\manifests\tmp\
+* app\build\intermediates\manifests\tmp\manifestMerger5500450582616328927.xml
+* app\build\intermediates\res\
+* app\build\intermediates\res\androidTest\
+* app\build\intermediates\res\androidTest\debug\
+* app\build\intermediates\res\androidTest\debug\drawable-hdpi\
+* app\build\intermediates\res\androidTest\debug\drawable-hdpi\ic_launcher.png
+* app\build\intermediates\res\androidTest\debug\drawable-mdpi\
+* app\build\intermediates\res\androidTest\debug\drawable-mdpi\ic_launcher.png
+* app\build\intermediates\res\androidTest\debug\drawable-xhdpi\
+* app\build\intermediates\res\androidTest\debug\drawable-xhdpi\ic_launcher.png
+* app\build\intermediates\res\androidTest\debug\values-v11\
+* app\build\intermediates\res\androidTest\debug\values-v11\values-v11.xml
+* app\build\intermediates\res\androidTest\debug\values-v14\
+* app\build\intermediates\res\androidTest\debug\values-v14\values-v14.xml
+* app\build\intermediates\res\androidTest\debug\values\
+* app\build\intermediates\res\androidTest\debug\values\values.xml
+* app\build\intermediates\resources\
+* app\build\intermediates\resources\resources-debug-androidTest.ap_
+* app\build\intermediates\symbols\
+* app\build\intermediates\symbols\androidTest\
+* app\build\intermediates\symbols\androidTest\debug\
+* app\build\intermediates\symbols\androidTest\debug\R.txt
+* app\build\outputs\
+* app\build\outputs\aar\
+* app\build\outputs\aar\app-debug.aar
+* app\build\tmp\
+* app\build\tmp\packageDebugJar\
+* app\build\tmp\packageDebugJar\MANIFEST.MF
+* app\libs\
+* app\libs\commons-io-2.4.jar
+* app\src\
+* app\src\main\
+* app\src\main\AndroidManifest.xml
+* app\src\main\java\
+* app\src\main\java\com\
+* app\src\main\java\com\andrei\
+* app\src\main\java\com\andrei\nextbus\
+* app\src\main\java\com\andrei\nextbus\library\
+* app\src\main\java\com\andrei\nextbus\library\commands\
+* app\src\main\java\com\andrei\nextbus\library\commands\Commands.java
+* app\src\main\java\com\andrei\nextbus\library\commands\OnlineCommands.java
+* app\src\main\java\com\andrei\nextbus\library\objects\
+* app\src\main\java\com\andrei\nextbus\library\objects\Agency.java
+* app\src\main\java\com\andrei\nextbus\library\objects\BaseInfoObj.java
+* app\src\main\java\com\andrei\nextbus\library\objects\BaseInformationProvider.java
+* app\src\main\java\com\andrei\nextbus\library\objects\DetailedDirection.java
+* app\src\main\java\com\andrei\nextbus\library\objects\Direction.java
+* app\src\main\java\com\andrei\nextbus\library\objects\Path.java
+* app\src\main\java\com\andrei\nextbus\library\objects\Point.java
+* app\src\main\java\com\andrei\nextbus\library\objects\Prediction.java
+* app\src\main\java\com\andrei\nextbus\library\objects\Predictions.java
+* app\src\main\java\com\andrei\nextbus\library\objects\Route.java
+* app\src\main\java\com\andrei\nextbus\library\objects\RouteSchedule.java
+* app\src\main\java\com\andrei\nextbus\library\objects\ScheduledStop.java
+* app\src\main\java\com\andrei\nextbus\library\objects\Stop.java
+* app\src\main\java\com\andrei\nextbus\library\objects\TimePair.java
+* app\src\main\java\com\andrei\nextbus\library\objects\Vehicle.java
+* app\src\main\java\com\andrei\nextbus\library\objects\XmlObj.java
+* app\src\main\java\com\andrei\nextbus\library\objects\messages\
+* app\src\main\java\com\andrei\nextbus\library\objects\messages\DetailedMessage.java
+* app\src\main\java\com\andrei\nextbus\library\objects\messages\Message.java
+* app\src\main\java\com\andrei\nextbus\library\objects\messages\RouteConfiguredForMessage.java
+* app\src\main\java\com\andrei\nextbus\library\objects\messages\Text.java
+* app\src\main\java\com\andrei\nextbus\library\objects\messages\TextPhoneme.java
+* app\src\main\java\com\andrei\nextbus\library\objects\messages\TextSecondaryLang.java
+* app\src\main\java\com\andrei\nextbus\library\parsers\
+* app\src\main\java\com\andrei\nextbus\library\parsers\DepthTagPair.java
+* app\src\main\java\com\andrei\nextbus\library\parsers\Parser.java
+* app\src\main\java\com\andrei\nextbus\library\parsers\RouteStopPair.java
+* app\src\main\java\com\andrei\nextbus\library\parsers\XmlTagFilter.java
+* app\src\main\res\
+* app\src\main\res\drawable-hdpi\
+* app\src\main\res\drawable-hdpi\ic_launcher.png
+* app\src\main\res\drawable-mdpi\
+* app\src\main\res\drawable-mdpi\ic_launcher.png
+* app\src\main\res\drawable-xhdpi\
+* app\src\main\res\drawable-xhdpi\ic_launcher.png
+* app\src\main\res\values-v11\
+* app\src\main\res\values-v11\styles.xml
+* app\src\main\res\values-v14\
+* app\src\main\res\values-v14\styles.xml
+* app\src\main\res\values\
+* app\src\main\res\values\strings.xml
+* app\src\main\res\values\styles.xml
+* build.gradle
+* build\
+* build\intermediates\
+* build\intermediates\gradle_project_sync_data.bin
+* gradle\
+* gradle\wrapper\
+* gradle\wrapper\gradle-wrapper.jar
+* gradle\wrapper\gradle-wrapper.properties
+* gradlew
+* gradlew.bat
+* import-summary.txt
+* library.iml
+* proguard-project.txt
+* settings.gradle
+
+Replaced Jars with Dependencies:
+--------------------------------
+The importer recognized the following .jar files as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the .jar file in your project was of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the jar replacement in the import wizard and try again:
+
+android-support-v4.jar => com.android.support:support-v4:18.0.0
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+In nextbus-library:
+* AndroidManifest.xml => nextbuslibrary\src\main\AndroidManifest.xml
+* libs\commons-io-2.4.jar => nextbuslibrary\libs\commons-io-2.4.jar
+* res\ => nextbuslibrary\src\main\res\
+* src\ => nextbuslibrary\src\main\java\
+In nextbus-demo:
+* AndroidManifest.xml => nextbusdemo\src\main\AndroidManifest.xml
+* lint.xml => nextbusdemo\lint.xml
+* res\ => nextbusdemo\src\main\res\
+* src\ => nextbusdemo\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
